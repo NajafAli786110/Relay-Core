@@ -11,6 +11,7 @@ use EngineWP\RelayCore\Import\CsvReader;
 use EngineWP\RelayCore\Import\ListingValidator;
 use EngineWP\RelayCore\Import\ListingImporter;
 use EngineWP\RelayCore\Import\FileValidator;
+use EngineWP\RelayCore\Import\ColumnMapper;
 
 /**
  * Class UploadPage
@@ -20,8 +21,6 @@ use EngineWP\RelayCore\Import\FileValidator;
  * @package EngineWP\RelayCore\Admin
  */
 class UploadPage {
-
-
 
 
 
@@ -105,7 +104,15 @@ class UploadPage {
 			wp_die( 'You are not capable to do this action!' );
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified via check_admin_referer() on the same line.
+		// Nonce verification for both forms at the top.
+		if ( isset( $_POST['submit_csv'] ) || isset( $_POST['submit_mapping'] ) ) {
+			$nonce = isset( $_POST['relay_core_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['relay_core_nonce'] ) ) : '';
+
+			if ( ! wp_verify_nonce( $nonce, 'relay_core_upload' ) && ! wp_verify_nonce( $nonce, 'relay_core_mapping' ) ) {
+				wp_die( 'Nonce verification failed!' );
+			}
+		}
+
 		if ( isset( $_POST['submit_csv'] ) ) {
 			$final_target   = $this->handle_file_verifier();
 			$temp_file_path = $final_target;
@@ -127,7 +134,6 @@ class UploadPage {
 			return;
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified via check_admin_referer() on the same line.
 		if ( isset( $_POST['submit_mapping'] ) || isset( $_POST['submit_csv'] ) ) {
 			if ( isset( $_POST['page_step_num'] ) ) {
 				$page_step_num = intval( $_POST['page_step_num'] );
@@ -156,14 +162,20 @@ class UploadPage {
 			wp_die( 'Nonce verification failed!' );
 		}
 
+		if ( ! isset( $_FILES['csv_file'] ) ) {
+			echo '<div class="notice notice-error"><p>No file uploaded.</p></div>';
+			return null;
+		}
+
 		$file_validator = new FileValidator();
-		$final_target   = $file_validator->validate( $_FILES['csv_file'] );
+		$final_target   = $file_validator->validate( $_FILES['csv_file'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- csv_file is server-generated, not user input.
 
 		if ( is_array( $final_target ) && isset( $final_target['success'] ) && false === $final_target['success'] ) {
 			echo '<div class="notice notice-error"><p>' . esc_html( $final_target['message'] ) . '</p></div>';
 			return null;
 		}
 
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- tmp_name is server-generated, not user input.
 		$tmp_file_path = isset( $_FILES['csv_file']['tmp_name'] ) ? $_FILES['csv_file']['tmp_name'] : '';
 		// File Save to uploads directory.
 		$upload_dir = wp_upload_dir();
@@ -198,8 +210,9 @@ class UploadPage {
 
 		$validator = new ListingValidator();
 		$importer  = new ListingImporter();
+		$mapper    = new ColumnMapper();
 
-		$file_path = isset( $_POST['csv_file_path'] ) ? sanitize_text_field( $_POST['csv_file_path'] ) : '';
+		$file_path = isset( $_POST['csv_file_path'] ) ? sanitize_text_field( wp_unslash( $_POST['csv_file_path'] ) ) : '';
 
 		if ( '' === $file_path || ! file_exists( $file_path ) ) {
 			echo '<div class="notice notice-error"><p>CSV file not found.</p></div>';
@@ -214,11 +227,19 @@ class UploadPage {
 			return;
 		}
 
-		$success_count = 0;
-		$error_log     = array();
+		$mapping = array(
+			'post_title'  => $_POST['select_post_title'],
+			'external_id' => $_POST['select_external_id'],
+		);
 
-		foreach ( $rows as $entry ) {
-			$validation_result = $validator->validate( $entry['data'], $entry['row_number'] );
+		$mapped = $mapper->map( $rows, $mapping );
+
+		$error_log     = array();
+		$created_count = 0;
+		$updated_count = 0;
+
+		foreach ( $mapped as $entry ) {
+			$validation_result = $validator->validate( $entry );
 			$validation        = $validation_result[0];
 
 			if ( false === $validation['valid'] ) {
@@ -229,10 +250,14 @@ class UploadPage {
 				continue;
 			}
 
-			$import_result = $importer->import( $entry['data'] );
+			$import_result = $importer->import( $entry );
 
 			if ( true === $import_result['success'] ) {
-				++$success_count;
+				if ( 'created' === $import_result['action'] ) {
+					++$created_count;
+				} elseif ( 'updated' === $import_result['action'] ) {
+					++$updated_count;
+				}
 			} else {
 				$error_log[] = array(
 					'row_number' => $entry['row_number'],
@@ -242,7 +267,11 @@ class UploadPage {
 		}
 
 		// Summary.
-		echo '<div class="notice notice-success"><p>Import complete! Success: ' . esc_html( $success_count ) . '</p></div>';
+		echo '<div class="notice notice-success"><p>Import complete! Created: ' . esc_html( $created_count ) . ', Updated: ' . esc_html( $updated_count ) . '</p></div>';
+
+		if ( file_exists( $file_path ) ) {
+			wp_delete_file( $file_path );
+		}
 
 		if ( ! empty( $error_log ) ) {
 			echo '<div class="notice notice-warning"><ul>';

@@ -12,49 +12,38 @@ namespace EngineWP\RelayCore\Import;
  */
 class ListingValidator {
 
-
-	const REQUIRED_ERROR      = 'required';
-	const EMPTY_LISTING_ERROR = 'empty_listing';
+	const REQUIRED_ERROR = 'required';
 	/**
 	 * Validates a listing.
 	 *
 	 * @param array $listing The listing to validate.
-	 * @param int   $row_number The row number being validated.
 	 */
-	public function validate( $listing, int $row_number ) {
+	public function validate( array $listing ) {
 		$validation_errors = array();
+		$row_number        = isset( $listing['row_number'] ) ? $listing['row_number'] : 0;
+		$post_title        = isset( $listing['post_title'] ) ? $listing['post_title'] : '';
+		$external_id       = isset( $listing['external_id'] ) ? $listing['external_id'] : '';
 
-		// Check if the listing is empty.
-		$check_row_text = array_filter(
-			$listing,
-			function ( $value ) {
-				return '' !== trim( (string) $value );
-			}
-		);
-
-		// Check if the listing is empty.
-		if ( empty( $check_row_text ) ) {
+		if ( ! isset( $post_title ) || '' === trim( (string) $post_title ) ) {
 			$validation_errors[] = array(
 				'valid' => false,
 				'error' => array(
 					'row_number' => $row_number,
-					'field'      => 'row',
-					'error'      => self::EMPTY_LISTING_ERROR,
-					'message'    => 'Either column mismatch or your listing is empty, check please!',
+					'field'      => 'post_title',
+					'error'      => self::REQUIRED_ERROR,
+					'message'    => 'Required field is empty.',
 				),
 			);
 
 			return $validation_errors;
 		}
 
-		// Check for required fields.
-		$first = reset( $listing );
-		if ( '' === trim( (string) $first ) ) {
+		if ( ! isset( $external_id ) || '' === trim( (string) $external_id ) ) {
 			$validation_errors[] = array(
 				'valid' => false,
 				'error' => array(
 					'row_number' => $row_number,
-					'field'      => array_key_first( $listing ),
+					'field'      => 'external_id',
 					'error'      => self::REQUIRED_ERROR,
 					'message'    => 'Required field is empty.',
 				),
