@@ -115,3 +115,226 @@ cd Relay-Core
 composer install
 npm install
 npx wp-env start
+```
+
+WordPress will be available at `http://localhost:8888` (admin: `admin` / `password`).
+
+---
+
+## Usage
+
+### Basic Import
+
+1. Navigate to **Listings → Bulk Import** in the WordPress admin
+2. Upload your CSV file
+3. Choose which columns map to post title and external ID
+4. Click **Submit Mapping** to run the import
+
+### Column Mapping
+
+Relay Core lets you map **any CSV column** to:
+
+- **Post Title** — the main identifier for the listing
+- **External ID** — a unique identifier for duplicate-safe updates
+- **Post Meta** — all remaining columns are stored as post meta with sanitized keys
+
+Example:
+
+| CSV Column | Mapped To |
+|---|---|
+| Business Name | Post Title |
+| Listing ID | External ID |
+| City | Meta: `city` |
+| Phone | Meta: `phone` |
+| Rating | Meta: `rating` |
+
+### External ID & Duplicate-Safe Imports
+
+Every row **must** have an External ID column. This ID is used to detect existing records:
+
+- **First import** → creates new listings
+- **Re-import with same ID** → updates existing listings (no duplicates)
+- **Re-import with new ID** → creates new listings
+
+This makes Relay Core safe for **scheduled syncs**, **CRM integrations**, and **recurring data updates**.
+
+---
+
+## Architecture
+
+Relay Core follows a clean, layered architecture:
+
+```
+UploadPage (orchestrator)
+    │
+    ├── FileValidator    → validates uploaded files
+    ├── CsvReader        → reads CSV rows
+    ├── ColumnMapper     → applies user mapping
+    ├── ListingValidator → validates each row
+    └── ListingImporter  → writes to WordPress
+```
+
+Each class has **one responsibility**, **no hidden dependencies**, and is **fully testable**.
+
+### Project Structure
+
+```
+relay-core/
+├── src/
+│   ├── Admin/
+│   │   └── UploadPage.php
+│   ├── Import/
+│   │   ├── CsvReader.php
+│   │   ├── FileValidator.php
+│   │   ├── ColumnMapper.php
+│   │   ├── ListingValidator.php
+│   │   └── ListingImporter.php
+│   ├── PostTypes/
+│   │   └── RegisterPostType.php
+│   ├── Debug.php
+│   └── RelayCorePlugin.php
+├── tests/
+├── .wp-env.json
+├── composer.json
+├── package.json
+├── phpcs.xml.dist
+├── phpunit.xml.dist
+└── relay-core.php
+```
+
+---
+
+## Development
+
+### Environment Setup
+
+Relay Core uses [**wp-env**](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-env/) for local development.
+
+```bash
+# Start WordPress + MySQL in Docker
+npx wp-env start
+
+# Stop
+npx wp-env stop
+
+# Destroy (wipes database)
+npx wp-env destroy
+```
+
+### Coding Standards
+
+This plugin follows the **WordPress Coding Standards** enforced by PHPCS.
+
+```bash
+# Check all files
+vendor/bin/phpcs
+
+# Auto-fix what can be fixed
+vendor/bin/phpcbf
+
+# Check specific file
+vendor/bin/phpcs src/Import/CsvReader.php
+```
+
+### Testing
+
+```bash
+# Run PHPUnit tests
+composer test
+
+# Run with coverage
+composer test:coverage
+```
+
+### Available Composer Scripts
+
+| Script | Purpose |
+|---|---|
+| `composer test` | Run PHPUnit tests |
+| `composer lint` | Run PHPCS |
+| `composer lint:fix` | Auto-fix coding standards |
+| `composer dump-autoload` | Regenerate autoloader |
+
+---
+
+## Roadmap
+
+- [x] Phase 1 — Flexible CSV import with any column structure
+- [x] Phase 2 — Column mapping, external ID, duplicate-safe imports
+- [ ] Phase 3 — User-defined conditions per column
+- [ ] Phase 4 — JSON & XML source support
+- [ ] Phase 5 — Background processing for large files (Action Scheduler)
+- [ ] Phase 6 — CSV generator UI
+- [ ] Phase 7 — REST API endpoints
+- [ ] Phase 8 — Gutenberg admin interface
+
+---
+
+## FAQ
+
+### Does Relay Core require a specific CSV format?
+
+No. Any CSV works, as long as it has:
+- A header row
+- An External ID column
+- A Post Title column
+
+You choose which columns those are during the mapping step.
+
+### What happens if my CSV has duplicates?
+
+The **last occurrence wins**. If the same External ID appears twice, the second row overwrites the first.
+
+### Can I re-import the same CSV?
+
+Yes — that's the point. External IDs make imports idempotent. Re-importing updates existing records instead of creating duplicates.
+
+### Is Relay Core translation-ready?
+
+Yes. All user-facing strings use the `relay-core` text domain.
+
+### Can I extend Relay Core?
+
+Yes. The architecture is intentionally modular. To add a new source (JSON, XML, API), implement a new Reader and pass its output to the existing Mapper, Validator, and Importer.
+
+---
+
+## Contributing
+
+Contributions are welcome. Please:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Follow WordPress Coding Standards
+4. Add tests for new features
+5. Ensure `composer lint` and `composer test` pass
+6. Submit a pull request
+
+---
+
+## License
+
+Relay Core is licensed under the **GPL-2.0-or-later** license.
+
+```
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+```
+
+---
+
+## Credits
+
+**Built by [Najaf Ali Balti](https://github.com/NajafAli786110)** under **EngineWP**.
+
+### Tech Stack
+
+- WordPress
+- PHP 8.1+
+- Composer + PSR-4
+- wp-env (Docker)
+- PHPCS (WordPress Coding Standards)
+- PHPUnit
+- GitHub Actions
