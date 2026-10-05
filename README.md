@@ -60,6 +60,7 @@ Each responsibility lives in its own class, testable in isolation, and easy to e
 ### Core
 
 - ✅ **Import any CSV** — no rigid column structure required
+- ✅ **Import CSV and JSON** — pluggable reader architecture via `ReaderInterface`
 - ✅ **Custom column mapping** — choose which column is the post title, which is the external ID, and which become post meta
 - ✅ **External ID support** — every row gets a unique identifier for duplicate-safe re-imports
 - ✅ **Create-or-Update logic** — re-import the same CSV without creating duplicates
@@ -130,6 +131,20 @@ WordPress will be available at `http://localhost:8888` (admin: `admin` / `passwo
 3. Choose which columns map to post title and external ID
 4. Click **Submit Mapping** to run the import
 
+### JSON Import
+
+Relay Core also supports flat JSON files. Upload a `.json` file the same way you upload a CSV:
+
+```json
+[
+    {
+        "External ID": "A-001",
+        "Business Name": "Karachi Biryani",
+        "City": "Karachi",
+        "Rating": "4.5"
+    }
+]
+
 ### Column Mapping
 
 Relay Core lets you map **any CSV column** to:
@@ -168,7 +183,9 @@ Relay Core follows a clean, layered architecture:
 UploadPage (orchestrator)
     │
     ├── FileValidator    → validates uploaded files
-    ├── CsvReader        → reads CSV rows
+    ├── ReaderInterface  → common contract for all readers
+    │   ├── CsvReader    → reads CSV rows
+    │   └── JsonReader   → reads flat JSON rows
     ├── ColumnMapper     → applies user mapping
     ├── ListingValidator → validates each row
     └── ListingImporter  → writes to WordPress
@@ -184,7 +201,9 @@ relay-core/
 │   ├── Admin/
 │   │   └── UploadPage.php
 │   ├── Import/
+│   │   ├── ReaderInterface.php
 │   │   ├── CsvReader.php
+│   │   ├── JsonReader.php
 │   │   ├── FileValidator.php
 │   │   ├── ColumnMapper.php
 │   │   ├── ListingValidator.php
@@ -261,8 +280,8 @@ composer test:coverage
 
 - [x] Phase 1 — Flexible CSV import with any column structure
 - [x] Phase 2 — Column mapping, external ID, duplicate-safe imports
-- [ ] Phase 3 — User-defined conditions per column
-- [ ] Phase 4 — JSON & XML source support
+- [x] Phase 3 — User-defined conditions per column
+- [x] Phase 4 — JSON & XML source support
 - [ ] Phase 5 — Background processing for large files (Action Scheduler)
 - [ ] Phase 6 — CSV generator UI
 - [ ] Phase 7 — REST API endpoints
