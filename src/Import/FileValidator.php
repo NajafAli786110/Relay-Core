@@ -36,10 +36,10 @@ class FileValidator {
 
 		$file_name = isset( $file['name'] ) ? sanitize_file_name( wp_unslash( $file['name'] ) ) : '';
 		$file_ext  = strtolower( pathinfo( $file_name, PATHINFO_EXTENSION ) );
-		if ( 'csv' !== $file_ext ) {
+		if ( 'csv' !== $file_ext && 'json' !== $file_ext ) {
 			return array(
 				'success' => false,
-				'message' => 'Only CSV files are allowed.',
+				'message' => 'Only CSV and JSON files are allowed.',
 			);
 		}
 
@@ -54,7 +54,7 @@ class FileValidator {
 
         // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- tmp_name is server-generated, not user input.
 		$tmp_file_path      = isset( $file['tmp_name'] ) ? $file['tmp_name'] : '';
-		$allowed_mime_types = array( 'text/plain', 'text/csv', 'application/csv', 'application/vnd.ms-excel' );
+		$allowed_mime_types = array( 'text/plain', 'text/csv', 'application/csv', 'application/vnd.ms-excel', 'application/json' );
 
 		if ( '' === $tmp_file_path || ! file_exists( $tmp_file_path ) ) {
 			return array(

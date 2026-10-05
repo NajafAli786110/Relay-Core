@@ -10,7 +10,7 @@ namespace EngineWP\RelayCore\Import;
 /**
  * Reads a CSV file and returns its rows as associative arrays.
  */
-class CsvReader {
+class CsvReader implements ReaderInterface {
 
 
 	/**
