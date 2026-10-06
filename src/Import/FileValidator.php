@@ -43,7 +43,7 @@ class FileValidator {
 			);
 		}
 
-		$max_file_size  = 5 * 1024 * 1024;
+		$max_file_size  = 20 * 1024 * 1024;
 		$name_file_size = isset( $file['size'] ) ? intval( $file['size'] ) : 0;
 		if ( $name_file_size > $max_file_size ) {
 			return array(

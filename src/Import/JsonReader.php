@@ -44,19 +44,16 @@ class JsonReader implements ReaderInterface {
 			return array();
 		}
 
-		$rows       = array();
 		$row_number = 1;
 
 		foreach ( $data as $entry ) {
-			$rows[] = array(
+			yield array(
 				'row_number' => $row_number,
 				'data'       => $entry,
 			);
 
 			++$row_number;
 		}
-
-		return $rows;
 	}
 
 	/**

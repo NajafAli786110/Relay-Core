@@ -15,12 +15,10 @@ class ColumnMapper {
 	/**
 	 * Maps CSV rows using user-provided column mapping.
 	 *
-	 * @param array $rows    Rows from CsvReader.
-	 * @param array $mapping Mapping array with post_title and external_id keys.
-	 * @return array Mapped rows.
+	 * @param iterable $rows Rows from CsvReader.
+	 * @param array    $mapping Mapping array with post_title and external_id keys.
 	 */
-	public function map( array $rows, array $mapping ) {
-		$mapped = array();
+	public function map( iterable $rows, array $mapping ) {
 
 		foreach ( $rows as $row ) {
 			$row_number = $row['row_number'];
@@ -37,14 +35,12 @@ class ColumnMapper {
 				}
 			}
 
-			$mapped[] = array(
+			yield array(
 				'row_number'  => $row_number,
 				'post_title'  => $post_title,
 				'external_id' => $external_id,
 				'meta'        => $meta,
 			);
 		}
-
-		return $mapped;
 	}
 }

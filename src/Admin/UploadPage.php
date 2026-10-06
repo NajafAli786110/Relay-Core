@@ -240,10 +240,10 @@ class UploadPage {
 			return;
 		}
 
-		$rows = $reader->read_rows();
+		$headers = $reader->read_headers();
 
-		if ( empty( $rows ) ) {
-			echo '<div class="notice notice-error"><p>Could not read file content.</p></div>';
+		if ( empty( $headers ) ) {
+			echo 'Could not read file content.';
 			return;
 		}
 
@@ -252,13 +252,11 @@ class UploadPage {
 			'external_id' => isset( $_POST['select_external_id'] ) ? sanitize_text_field( wp_unslash( $_POST['select_external_id'] ) ) : '',
 		);
 
-		$mapped = $mapper->map( $rows, $mapping );
-
 		$error_log     = array();
 		$created_count = 0;
 		$updated_count = 0;
 
-		foreach ( $mapped as $entry ) {
+		foreach ( $mapper->map( $reader->read_rows(), $mapping ) as $entry ) {
 			$validation_result = $validator->validate( $entry );
 			$validation        = $validation_result[0];
 

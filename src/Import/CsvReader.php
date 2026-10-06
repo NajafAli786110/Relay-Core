@@ -35,20 +35,19 @@ class CsvReader implements ReaderInterface {
 	 * @return array[] List of associative arrays, one per row.
 	 */
 	public function read_rows() {
-		$rows = array();
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Streaming line by line.
 		$handle = fopen( $this->file_path, 'r' );
 
 		if ( false === $handle ) {
-			return $rows;
+			return array();
 		}
 
 		$headers = fgetcsv( $handle );
 
 		if ( false === $headers ) {
 			fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
-			return $rows;
+			return array();
 		}
 
 		// phpcs:ignore Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure -- Standard fgetcsv loop pattern.
@@ -62,16 +61,15 @@ class CsvReader implements ReaderInterface {
 				$data = array_combine( $headers, $row );
 			}
 
-			$rows[] = array(
+			yield array(
 				'row_number' => $row_number,
 				'data'       => $data,
 			);
-			$row    = fgetcsv( $handle );
+			$row = fgetcsv( $handle );
 			++$row_number;
 		}
 
 		fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
-		return $rows;
 	}
 
 	/**
@@ -80,18 +78,17 @@ class CsvReader implements ReaderInterface {
 	 * @return array List of column names, or empty array on failure.
 	 */
 	public function read_headers() {
-		$header = array();
+		$headers = array();
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Streaming line by line.
 		$handle = fopen( $this->file_path, 'r' );
 
 		if ( false === $handle ) {
-			return $header;
+			return array();
 		}
 
-		$header = fgetcsv( $handle );
-
+		$headers = fgetcsv( $handle );
 		fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
-		return false === $header ? array() : $header;
+		return false === $headers ? array() : $headers;
 	}
 }
