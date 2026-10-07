@@ -121,7 +121,6 @@ class UploadPage {
 			return;
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified via check_admin_referer() on the same line.
 		if ( isset( $_POST['submit_mapping'] ) ) {
 			$this->handle_file_upload();
 			return;
@@ -168,10 +167,7 @@ class UploadPage {
 			wp_die( 'You are not capable to do this action!' );
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified via check_admin_referer() on this same line.
-		if ( ! isset( $_POST['submit_file'] ) || ! check_admin_referer( 'relay_core_upload', 'relay_core_nonce' ) ) {
-			wp_die( 'Nonce verification failed!' );
-		}
+		check_admin_referer( 'relay_core_upload', 'relay_core_nonce' );
 
 		if ( ! isset( $_FILES['import_file'] ) ) {
 			echo '<div class="notice notice-error"><p>No file uploaded.</p></div>';
@@ -179,7 +175,7 @@ class UploadPage {
 		}
 
 		$file_validator = new FileValidator();
-		$final_target   = $file_validator->validate( $_FILES['import_file'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- import_file is server-generated, not user input.
+		$final_target   = $file_validator->validate( $_FILES['import_file'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- FileValidator sanitizes and validates each key of the array.
 
 		if ( is_array( $final_target ) && isset( $final_target['success'] ) && false === $final_target['success'] ) {
 			echo '<div class="notice notice-error"><p>' . esc_html( $final_target['message'] ) . '</p></div>';
@@ -216,10 +212,7 @@ class UploadPage {
 			wp_die( 'You are not capable to do this action!' );
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified via check_admin_referer() on this same line.
-		if ( ! isset( $_POST['submit_mapping'] ) || ! check_admin_referer( 'relay_core_mapping', 'relay_core_nonce' ) ) {
-			wp_die( 'Nonce verification failed!' );
-		}
+		check_admin_referer( 'relay_core_mapping', 'relay_core_nonce' );
 
 		$validator = new ListingValidator();
 		$importer  = new ListingImporter();

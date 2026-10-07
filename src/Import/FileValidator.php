@@ -48,7 +48,7 @@ class FileValidator {
 		if ( $name_file_size > $max_file_size ) {
 			return array(
 				'success' => false,
-				'message' => 'File is too large. Max size is 5MB.',
+				'message' => 'File is too large. Max size is 20MB.',
 			);
 		}
 

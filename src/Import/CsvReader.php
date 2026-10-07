@@ -50,7 +50,6 @@ class CsvReader implements ReaderInterface {
 			return array();
 		}
 
-		// phpcs:ignore Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure -- Standard fgetcsv loop pattern.
 		$row        = fgetcsv( $handle );
 		$row_number = 2;
 

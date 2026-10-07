@@ -21,9 +21,9 @@ class ListingImporter {
 	 * @param array $listing The listing to import.
 	 */
 	public function import( array $listing ) {
-		$post_title          = isset( $listing['post_title'] ) ? $listing['post_title'] : '';
-		$external_id         = isset( $listing['external_id'] ) ? $listing['external_id'] : '';
-		$meta                = isset( $listing['meta'] ) && is_array( $listing['meta'] ) ? $listing['meta'] : array();
+		$post_title          = isset( $listing['post_title'] ) ? sanitize_text_field( $listing['post_title'] ) : '';
+		$external_id         = isset( $listing['external_id'] ) ? sanitize_text_field( $listing['external_id'] ) : '';
+		$meta                = isset( $listing['meta'] ) && is_array( $listing['meta'] ) ? $this->sanitize_meta( $listing['meta'] ) : array();
 		$meta['external_id'] = $external_id;
 
 		$existing_post = get_posts(
@@ -93,5 +93,24 @@ class ListingImporter {
 			'action'  => 'created',
 			'error'   => null,
 		);
+	}
+
+	/**
+	 * Sanitizes meta values based on their type.
+	 *
+	 * @param array $meta The meta data to sanitize.
+	 * @return array The sanitized meta data.
+	 */
+	private function sanitize_meta( array $meta ) {
+		$sanitized_meta = array();
+
+		foreach ( $meta as $key => $value ) {
+			if ( filter_var( $value, FILTER_VALIDATE_URL ) ) {
+				$sanitized_meta[ $key ] = esc_url_raw( $value );
+			} else {
+				$sanitized_meta[ $key ] = sanitize_text_field( $value );
+			}
+		}
+		return $sanitized_meta;
 	}
 }
