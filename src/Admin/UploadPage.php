@@ -13,6 +13,7 @@ use EngineWP\RelayCore\Import\ListingImporter;
 use EngineWP\RelayCore\Import\FileValidator;
 use EngineWP\RelayCore\Import\ColumnMapper;
 use EngineWP\RelayCore\Import\JsonReader;
+use EngineWP\RelayCore\Import\ImportState;
 
 /**
  * Class UploadPage
@@ -22,6 +23,7 @@ use EngineWP\RelayCore\Import\JsonReader;
  * @package EngineWP\RelayCore\Admin
  */
 class UploadPage {
+
 
 
 	/**
@@ -54,18 +56,18 @@ class UploadPage {
 	 * Renders the mapping HTML for the file columns.
 	 *
 	 * @param array  $headers   List of file headers.
-	 * @param string $file_path Path to the uploaded file.
+	 * @param string $import_id State id to get state.
 	 *
 	 * @return void
 	 */
-	public function mapping_html( array $headers, string $file_path ) {
+	public function mapping_html( array $headers, string $import_id ) {
 		?>
 		<div class="wrap">
 			<h1>Map File Columns</h1>
 
 			<form method="post" enctype="multipart/form-data">
 				<?php wp_nonce_field( 'relay_core_mapping', 'relay_core_nonce' ); ?>
-				<input type="hidden" name="source_file_path" value="<?php echo esc_attr( $file_path ); ?>">
+				<input type="hidden" name="import_id" value="<?php echo esc_attr( $import_id ); ?>">
 				<input type="hidden" name="page_step_num" value="2">
 				<label for="select_post_title">Select Post title: </label>
 				<select name="select_post_title" required>
@@ -126,7 +128,6 @@ class UploadPage {
 			return;
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified via check_admin_referer() on the same line.
 		if ( ! isset( $_POST['submit_file'] ) && ! isset( $_POST['submit_mapping'] ) ) {
 			$this->import_html();
 			return;
@@ -150,7 +151,14 @@ class UploadPage {
 						echo '<div class="notice notice-error"><p>Could not read headers from the file. The file may be empty, invalid, or contain nested data (which is not supported).</p></div>';
 						return;
 					}
-					$this->mapping_html( $headers, $temp_file_path );
+					$import_state = new ImportState();
+					$import_id    = $import_state->create(
+						array(
+							'file_path' => $temp_file_path,
+							'status'    => 'pending',
+						)
+					);
+					$this->mapping_html( $headers, $import_id );
 					return;
 				}
 			}
@@ -218,7 +226,17 @@ class UploadPage {
 		$importer  = new ListingImporter();
 		$mapper    = new ColumnMapper();
 
-		$file_path = isset( $_POST['source_file_path'] ) ? sanitize_text_field( wp_unslash( $_POST['source_file_path'] ) ) : '';
+		$import_id = isset( $_POST['import_id'] ) ? sanitize_text_field( wp_unslash( $_POST['import_id'] ) ) : '';
+
+		$import_state = new ImportState();
+		$state        = $import_state->get( $import_id );
+
+		if ( null === $state ) {
+			echo '<div class="notice notice-error"><p>Id is not correct. Please fill the form again!</p></div>';
+			return;
+		}
+
+		$file_path = $state['file_path'];
 
 		if ( '' === $file_path || ! file_exists( $file_path ) ) {
 			echo '<div class="notice notice-error"><p>File not found.</p></div>';
@@ -279,6 +297,8 @@ class UploadPage {
 
 		// Summary.
 		echo '<div class="notice notice-success"><p>Import complete! Created: ' . esc_html( $created_count ) . ', Updated: ' . esc_html( $updated_count ) . '</p></div>';
+
+		$import_state->delete( $import_id );
 
 		if ( file_exists( $file_path ) ) {
 			wp_delete_file( $file_path );
