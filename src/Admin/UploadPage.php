@@ -14,6 +14,7 @@ use EngineWP\RelayCore\Import\FileValidator;
 use EngineWP\RelayCore\Import\ColumnMapper;
 use EngineWP\RelayCore\Import\JsonReader;
 use EngineWP\RelayCore\Import\ImportState;
+use EngineWP\RelayCore\Import\ReaderFactory;
 
 /**
  * Class UploadPage
@@ -137,8 +138,7 @@ class UploadPage {
 			if ( isset( $_POST['page_step_num'] ) ) {
 				$page_step_num = intval( $_POST['page_step_num'] );
 				if ( 1 === $page_step_num ) {
-					$file_ext = strtolower( pathinfo( $temp_file_path, PATHINFO_EXTENSION ) );
-					$reader   = $this->get_reader( $temp_file_path, $file_ext );
+					$reader = $this->get_reader( $temp_file_path );
 					if ( null === $reader ) {
 						echo '<div class="notice notice-error"><p>Unsupported file type.</p></div>';
 						return;
@@ -243,8 +243,7 @@ class UploadPage {
 			return;
 		}
 
-		$file_ext = strtolower( pathinfo( $file_path, PATHINFO_EXTENSION ) );
-		$reader   = $this->get_reader( $file_path, $file_ext );
+		$reader = $this->get_reader( $file_path );
 
 		if ( null === $reader ) {
 			echo '<div class="notice notice-error"><p>Unsupported file type.</p></div>';
@@ -317,17 +316,11 @@ class UploadPage {
 	 * Returns the appropriate reader based on file extension.
 	 *
 	 * @param string $file_path Path to the uploaded file.
-	 * @param string $file_ext  File extension (csv or json).
 	 *
 	 * @return CsvReader|JsonReader|null The reader instance or null if unsupported.
 	 */
-	private function get_reader( string $file_path, string $file_ext ) {
-		if ( 'csv' === $file_ext ) {
-			return new CsvReader( $file_path );
-		} elseif ( 'json' === $file_ext ) {
-			return new JsonReader( $file_path );
-		}
-
-		return null;
+	private function get_reader( string $file_path ) {
+		$check_file = new ReaderFactory();
+		return $check_file->make( $file_path );
 	}
 }
