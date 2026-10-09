@@ -8,10 +8,7 @@
 namespace EngineWP\RelayCore\Admin;
 
 use EngineWP\RelayCore\Import\CsvReader;
-use EngineWP\RelayCore\Import\ListingValidator;
-use EngineWP\RelayCore\Import\ListingImporter;
 use EngineWP\RelayCore\Import\FileValidator;
-use EngineWP\RelayCore\Import\ColumnMapper;
 use EngineWP\RelayCore\Import\JsonReader;
 use EngineWP\RelayCore\Import\ImportState;
 use EngineWP\RelayCore\Import\ReaderFactory;
@@ -222,10 +219,6 @@ class UploadPage {
 
 		check_admin_referer( 'relay_core_mapping', 'relay_core_nonce' );
 
-		$validator = new ListingValidator();
-		$importer  = new ListingImporter();
-		$mapper    = new ColumnMapper();
-
 		$import_id = isset( $_POST['import_id'] ) ? sanitize_text_field( wp_unslash( $_POST['import_id'] ) ) : '';
 
 		$import_state = new ImportState();
@@ -250,66 +243,43 @@ class UploadPage {
 			return;
 		}
 
-		$headers = $reader->read_headers();
-
-		if ( empty( $headers ) ) {
-			echo 'Could not read file content.';
-			return;
-		}
-
 		$mapping = array(
 			'post_title'  => isset( $_POST['select_post_title'] ) ? sanitize_text_field( wp_unslash( $_POST['select_post_title'] ) ) : '',
 			'external_id' => isset( $_POST['select_external_id'] ) ? sanitize_text_field( wp_unslash( $_POST['select_external_id'] ) ) : '',
 		);
 
-		$error_log     = array();
-		$created_count = 0;
-		$updated_count = 0;
+		$state_changes = array(
+			'mapping' => $mapping,
+			'offset'  => 0,
+			'created' => 0,
+			'updated' => 0,
+			'failed'  => 0,
+			'status'  => 'running',
+		);
 
-		foreach ( $mapper->map( $reader->read_rows(), $mapping ) as $entry ) {
-			$validation_result = $validator->validate( $entry );
-			$validation        = $validation_result[0];
-
-			if ( false === $validation['valid'] ) {
-				$error_log[] = array(
-					'row_number' => $validation['error']['row_number'],
-					'message'    => $validation['error']['message'],
-				);
-				continue;
-			}
-
-			$import_result = $importer->import( $entry );
-
-			if ( true === $import_result['success'] ) {
-				if ( 'created' === $import_result['action'] ) {
-					++$created_count;
-				} elseif ( 'updated' === $import_result['action'] ) {
-					++$updated_count;
-				}
-			} else {
-				$error_log[] = array(
-					'row_number' => $entry['row_number'],
-					'message'    => $import_result['error'],
-				);
-			}
+		$update_state = $import_state->update( $import_id, $state_changes );
+		if ( false === $update_state ) {
+			echo '<div class="notice notice-error"><p>Your ID might be wrong. File upload the file again!</p></div>';
+			return;
 		}
 
-		// Summary.
-		echo '<div class="notice notice-success"><p>Import complete! Created: ' . esc_html( $created_count ) . ', Updated: ' . esc_html( $updated_count ) . '</p></div>';
+		$ajax_response = array(
+			'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
+			'nonce'    => wp_create_nonce( 'relay_core_import_batch' ),
+			'importId' => $import_id,
+		);
 
-		$import_state->delete( $import_id );
+		wp_enqueue_script( 'relay-core-import', plugins_url( 'assets/js/import.js', RELAY_CORE_FILE ), array(), '0.1.0', true );
+		wp_localize_script( 'relay-core-import', 'relayCoreImport', $ajax_response );
 
-		if ( file_exists( $file_path ) ) {
-			wp_delete_file( $file_path );
-		}
+		?>
 
-		if ( ! empty( $error_log ) ) {
-			echo '<div class="notice notice-warning"><ul>';
-			foreach ( $error_log as $err ) {
-				echo '<li>Row ' . esc_html( $err['row_number'] ) . ': ' . esc_html( $err['message'] ) . '</li>';
-			}
-			echo '</ul></div>';
-		}
+		<div class="wrap">
+			<h1>Importing…</h1>
+			<p id="relay-core-progress">Starting…</p>
+		</div>
+
+		<?php
 	}
 
 	/**

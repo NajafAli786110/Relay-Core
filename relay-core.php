@@ -27,6 +27,7 @@ use EngineWP\RelayCore\Import\ImportState;
 use EngineWP\RelayCore\Import\ListingImporter;
 use EngineWP\RelayCore\Import\ReaderFactory;
 
+define( 'RELAY_CORE_FILE', __FILE__ );
 
 $relay_core_plugin = new RelayCorePlugin();
 $relay_core_plugin->run();
