@@ -55,6 +55,13 @@ class BatchProcessor {
 	private $importer;
 
 	/**
+	 * Saves the rows that could not be imported.
+	 *
+	 * @var ImportLog
+	 */
+	private $log;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param ImportState      $state          Stores and retrieves the progress of an import.
@@ -62,13 +69,15 @@ class BatchProcessor {
 	 * @param ColumnMapper     $mapper         Maps raw rows to post title, external ID and meta.
 	 * @param ListingValidator $validator      Validates a mapped row before it is imported.
 	 * @param ListingImporter  $importer       Creates or updates a listing from a mapped row.
+	 * @param ImportLog        $log            Saves the rows that could not be imported.
 	 */
-	public function __construct( ImportState $state, ReaderFactory $reader_factory, ColumnMapper $mapper, ListingValidator $validator, ListingImporter $importer ) {
+	public function __construct( ImportState $state, ReaderFactory $reader_factory, ColumnMapper $mapper, ListingValidator $validator, ListingImporter $importer, ImportLog $log ) {
 		$this->state          = $state;
 		$this->reader_factory = $reader_factory;
 		$this->mapper         = $mapper;
 		$this->validator      = $validator;
 		$this->importer       = $importer;
+		$this->log            = $log;
 	}
 
 	/**
@@ -126,10 +135,13 @@ class BatchProcessor {
 			$row_validate = $this->validator->validate( $row )[0];
 			if ( false === $row_validate['valid'] ) {
 				++$failed;
+				$this->log->add( $import_id, $row_validate['error']['row_number'], $row_validate['error']['field'], $row_validate['error']['message'] );
+
 			} else {
 				$row_import = $this->importer->import( $row );
 				if ( false === $row_import['success'] ) {
 					++$failed;
+					$this->log->add( $import_id, $row['row_number'], "", $row_import['error'] );
 				} elseif ( 'updated' === $row_import['action'] ) {
 					++$updated;
 				} else {
