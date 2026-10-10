@@ -153,6 +153,7 @@ class UploadPage {
 						array(
 							'file_path' => $temp_file_path,
 							'status'    => 'pending',
+							'total'     => $reader->count_rows(),
 						)
 					);
 					$this->mapping_html( $headers, $import_id );

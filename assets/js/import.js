@@ -27,7 +27,9 @@ async function runBatch() {
     }
 
     if (result.data.status === "running") {
-        progressText.textContent = `${result.data.offset} rows done. Wait for complete!`;
+        const { offset, total } = result.data;
+        const percent = total > 0 ? Math.round(offset / total * 100) : 0;
+        progressText.textContent = `${offset} / ${total} rows (${percent}%)`;
         runBatch();
     } else {
         progressText.textContent = `Congratulations Imported Successfully! ${result.data.offset} rows done. Created: ${result.data.created}, Updated: ${result.data.updated}, Failed: ${result.data.failed}`;

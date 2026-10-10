@@ -84,7 +84,7 @@ class JsonReader implements ReaderInterface {
 			return array();
 		}
 
-        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file read for import.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file read for import.
 		$json_content = file_get_contents( $this->file_path );
 
 		if ( false === $json_content ) {
@@ -110,5 +110,14 @@ class JsonReader implements ReaderInterface {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Counts the entries in the JSON file.
+	 *
+	 * @return int Number of entries, or 0 if the file is missing or invalid.
+	 */
+	public function count_rows() {
+		return count( $this->load_data() );
 	}
 }

@@ -25,4 +25,11 @@ interface ReaderInterface {
 	 * @return array
 	 */
 	public function read_headers();
+
+	/**
+	 * Counts the data rows in the source.
+	 *
+	 * @return int
+	 */
+	public function count_rows();
 }

@@ -90,4 +90,16 @@ class CsvReader implements ReaderInterface {
 		fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 		return false === $headers ? array() : $headers;
 	}
+
+	/**
+	 * Counts the data rows in the CSV file, not including the header row.
+	 *
+	 * Rows are counted by parsing the file, because a quoted cell can
+	 * contain line breaks and one row can span several lines.
+	 *
+	 * @return int Number of data rows.
+	 */
+	public function count_rows() {
+		return iterator_count( $this->read_rows() );
+	}
 }

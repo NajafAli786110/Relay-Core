@@ -77,6 +77,7 @@ class ImportAjax {
 				'updated' => $result['updated'],
 				'failed'  => $result['failed'],
 				'status'  => $result['status'],
+				'total'   => $result['total'] ?? 0,
 			)
 		);
 	}
