@@ -75,4 +75,22 @@ class ImportLog {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Custom table; WordPress has no API for it.
 		$wpdb->insert( $this->table_name(), $entry, $entry_type );
 	}
+
+	/**
+	 * Returns the failed rows of one import, ordered by row number.
+	 *
+	 * @param string $import_id ID of the import.
+	 * @param int    $limit     Maximum number of rows to return.
+	 * @return array[] List of rows, each with row_num, field and message.
+	 */
+	public function get_for_import( string $import_id, int $limit = 100 ) {
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; read once when an import finishes.
+		$result = $wpdb->get_results(
+			$wpdb->prepare( 'SELECT row_num, field, message FROM %i WHERE import_id = %s ORDER BY row_num ASC LIMIT %d', $this->table_name(), $import_id, $limit ),
+			ARRAY_A
+		);
+
+		return $result;
+	}
 }

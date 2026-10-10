@@ -8,6 +8,7 @@
 namespace EngineWP\RelayCore\Admin;
 
 use EngineWP\RelayCore\Import\BatchProcessor;
+use EngineWP\RelayCore\Import\ImportLog;
 
 /**
  * Handles the AJAX requests that run an import one batch at a time.
@@ -22,12 +23,21 @@ class ImportAjax {
 	private $processor;
 
 	/**
+	 * Reads the rows that failed during an import.
+	 *
+	 * @var ImportLog
+	 */
+	private $import_log;
+
+	/**
 	 * Constructor.
 	 *
-	 * @param BatchProcessor $processor Runs one batch of an import.
+	 * @param BatchProcessor $processor  Runs one batch of an import.
+	 * @param ImportLog      $import_log Reads the rows that failed during an import.
 	 */
-	public function __construct( BatchProcessor $processor ) {
-		$this->processor = $processor;
+	public function __construct( BatchProcessor $processor, ImportLog $import_log ) {
+		$this->processor  = $processor;
+		$this->import_log = $import_log;
 	}
 
 	/**
@@ -70,15 +80,21 @@ class ImportAjax {
 			);
 		}
 
+		$response = array(
+			'offset'  => $result['offset'],
+			'created' => $result['created'],
+			'updated' => $result['updated'],
+			'failed'  => $result['failed'],
+			'status'  => $result['status'],
+			'total'   => $result['total'] ?? 0,
+		);
+
+		if ( 'done' === $result['status'] ) {
+			$response['errors'] = $this->import_log->get_for_import( $import_id );
+		}
+
 		wp_send_json_success(
-			array(
-				'offset'  => $result['offset'],
-				'created' => $result['created'],
-				'updated' => $result['updated'],
-				'failed'  => $result['failed'],
-				'status'  => $result['status'],
-				'total'   => $result['total'] ?? 0,
-			)
+			$response
 		);
 	}
 }

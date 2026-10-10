@@ -141,7 +141,7 @@ class BatchProcessor {
 				$row_import = $this->importer->import( $row );
 				if ( false === $row_import['success'] ) {
 					++$failed;
-					$this->log->add( $import_id, $row['row_number'], "", $row_import['error'] );
+					$this->log->add( $import_id, $row['row_number'], '', $row_import['error'] );
 				} elseif ( 'updated' === $row_import['action'] ) {
 					++$updated;
 				} else {
