@@ -1,1 +1,1 @@
-{"version":2,"defects":[],"times":{"CsvReaderTest::test_reads_all_rows":0.002}}
+{"version":2,"defects":{"CsvReaderTest::test_row_with_wrong_column_count_has_empty_data":7},"times":{"CsvReaderTest::test_reads_all_rows":0.002,"CsvReaderTest::test_header_only_file_returns_no_rows":0,"CsvReaderTest::test_row_with_wrong_column_count_has_empty_data":0}}
