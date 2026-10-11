@@ -46,13 +46,13 @@ async function runBatch() {
                 const rowNumber = item.row_num;
                 const field = item.field;
                 const message = item.message;
-                const fieldText = field.trim === '' ? '' : `(${field})`
+                const fieldText = field.trim() === '' ? '' : `(${field})`
 
                 const li = document.createElement("li");
                 li.textContent = `Row ${rowNumber}: ${message} ${fieldText}`;
                 ul.appendChild(li);
             })
-            
+
             progressText.after(ul);
         }
     }
