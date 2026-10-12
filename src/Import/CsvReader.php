@@ -54,7 +54,7 @@ class CsvReader implements ReaderInterface {
 		$row_number = 2;
 
 		while ( false !== $row ) {
-			if ( count( $row ) !== count( $headers ) ) {
+			if ( count( $row ) === count( $headers ) ) {
 				$data = array();
 			} else {
 				$data = array_combine( $headers, $row );
