@@ -1,0 +1,57 @@
+[
+  {
+    "External ID": "J-001",
+    "Business Name": "JSON Karachi Biryani",
+    "City": "Karachi",
+    "Phone": "0300-1000001",
+    "Category": "Restaurant",
+    "Rating": "4.5",
+    "Email": "info@jkb.pk",
+    "Website": "https://jkb.pk",
+    "Status": "active"
+  },
+  {
+    "External ID": "J-002",
+    "Business Name": "JSON Lahore Grill",
+    "City": "Lahore",
+    "Phone": "0300-1000002",
+    "Category": "Restaurant",
+    "Rating": "4.2",
+    "Email": "info@jlg.pk",
+    "Website": "https://jlg.pk",
+    "Status": "active"
+  },
+  {
+    "External ID": "J-003",
+    "Business Name": "JSON Islamabad Cafe",
+    "City": "Islamabad",
+    "Phone": "0300-1000003",
+    "Category": "Cafe",
+    "Rating": "4.7",
+    "Email": "info@jic.pk",
+    "Website": "https://jic.pk",
+    "Status": "active"
+  },
+  {
+    "External ID": "J-004",
+    "Business Name": "JSON Peshawar Foods",
+    "City": "Peshawar",
+    "Phone": "0300-1000004",
+    "Category": "Restaurant",
+    "Rating": "4.0",
+    "Email": "info@jpf.pk",
+    "Website": "https://jpf.pk",
+    "Status": "inactive"
+  },
+  {
+    "External ID": "J-005",
+    "Business Name": "JSON Multan Sweets",
+    "City": "Multan",
+    "Phone": "0300-1000005",
+    "Category": "Bakery",
+    "Rating": "4.6",
+    "Email": "info@jms.pk",
+    "Website": "https://jms.pk",
+    "Status": "active"
+  }
+]
