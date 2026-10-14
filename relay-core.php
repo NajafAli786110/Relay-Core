@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/woocommerce/action-scheduler/action-scheduler.php';
 
 use EngineWP\RelayCore\RelayCorePlugin;
 use EngineWP\RelayCore\Admin\UploadPage;
@@ -27,6 +28,7 @@ use EngineWP\RelayCore\Import\ImportState;
 use EngineWP\RelayCore\Import\ListingImporter;
 use EngineWP\RelayCore\Import\ReaderFactory;
 use EngineWP\RelayCore\Import\ImportLog;
+use EngineWP\RelayCore\Import\BackgroundImport;
 
 define( 'RELAY_CORE_FILE', __FILE__ );
 
@@ -45,3 +47,6 @@ add_action( 'init', array( $register_post_type, 'register' ) );
 add_action( 'wp_ajax_relay_core_import_batch', array( $import_ajax, 'handle_batch' ) );
 
 register_activation_hook( RELAY_CORE_FILE, array( $import_log, 'create_table' ) );
+
+$background_import = new BackgroundImport( $batch_processor );
+add_action( 'relay_core_run_batch', array( $background_import, 'run_batch' ) );
