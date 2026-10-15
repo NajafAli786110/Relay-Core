@@ -31,7 +31,7 @@ class ImportAjax {
 	private $import_log;
 
 	/**
-	 * Reads the rows that failed during an import.
+	 * Reads the progress of an import.
 	 *
 	 * @var ImportState
 	 */
@@ -43,10 +43,10 @@ class ImportAjax {
 	 * @param BatchProcessor $processor  Runs one batch of an import.
 	 * @param ImportLog      $import_log Reads the rows that failed during an import.
 	 */
-	public function __construct( BatchProcessor $processor, ImportLog $import_log, ImportState $importState ) {
+	public function __construct( BatchProcessor $processor, ImportLog $import_log, ImportState $import_state ) {
 		$this->processor    = $processor;
 		$this->import_log   = $import_log;
-		$this->import_state = $importState;
+		$this->import_state = $import_state;
 	}
 
 	/**
@@ -132,7 +132,7 @@ class ImportAjax {
 
 		$state = $this->import_state->get( $import_id );
 
-		if ( ! is_array( $result ) || null === $result ) {
+		if ( ! is_array( $state ) || null === $state ) {
 			wp_send_json_error(
 				array(
 					'message' => 'Invalid Import ID',
@@ -142,15 +142,15 @@ class ImportAjax {
 		}
 
 		$response = array(
-			'offset'  => $result['offset'],
-			'created' => $result['created'],
-			'updated' => $result['updated'],
-			'failed'  => $result['failed'],
-			'status'  => $result['status'],
-			'total'   => $result['total'] ?? 0,
+			'offset'  => $state['offset'],
+			'created' => $state['created'],
+			'updated' => $state['updated'],
+			'failed'  => $state['failed'],
+			'status'  => $state['status'],
+			'total'   => $state['total'] ?? 0,
 		);
 
-		if ( 'done' === $result['status'] ) {
+		if ( 'done' === $state['status'] ) {
 			$response['errors'] = $this->import_log->get_for_import( $import_id );
 		}
 

@@ -24,7 +24,7 @@ use EngineWP\RelayCore\Import\BackgroundImport;
 class UploadPage {
 
 	/**
-	 * Runs one batch of an import.
+	 * Starts an import in the background.
 	 *
 	 * @var BackgroundImport
 	 */
