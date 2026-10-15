@@ -9,6 +9,7 @@ namespace EngineWP\RelayCore\Admin;
 
 use EngineWP\RelayCore\Import\BatchProcessor;
 use EngineWP\RelayCore\Import\ImportLog;
+use EngineWP\RelayCore\Import\ImportState;
 
 /**
  * Handles the AJAX requests that run an import one batch at a time.
@@ -30,14 +31,22 @@ class ImportAjax {
 	private $import_log;
 
 	/**
+	 * Reads the rows that failed during an import.
+	 *
+	 * @var ImportState
+	 */
+	private $import_state;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param BatchProcessor $processor  Runs one batch of an import.
 	 * @param ImportLog      $import_log Reads the rows that failed during an import.
 	 */
-	public function __construct( BatchProcessor $processor, ImportLog $import_log ) {
+	public function __construct( BatchProcessor $processor, ImportLog $import_log, ImportState $importState ) {
 		$this->processor  = $processor;
 		$this->import_log = $import_log;
+		$this->import_state = $importState;
 	}
 
 	/**
@@ -96,5 +105,21 @@ class ImportAjax {
 		wp_send_json_success(
 			$response
 		);
+	}
+
+	public function handle_status() {
+		check_ajax_referer('relay_core_import_batch', 'nonce');
+
+		$import_id = isset( $_POST['import_id'] ) ? sanitize_text_field( wp_unslash( $_POST['import_id'] ) ) : null;
+		$state = $this->import_state->get( $import_id );
+		
+		if ( null === $import_id ) {
+			wp_send_json_error(
+				array(
+					'message' => 'Invalid Import ID',
+				),
+				404
+			);
+		}
 	}
 }

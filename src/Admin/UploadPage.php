@@ -12,6 +12,12 @@ use EngineWP\RelayCore\Import\FileValidator;
 use EngineWP\RelayCore\Import\JsonReader;
 use EngineWP\RelayCore\Import\ImportState;
 use EngineWP\RelayCore\Import\ReaderFactory;
+use EngineWP\RelayCore\Import\BackgroundImport;
+use EngineWP\RelayCore\Import\BatchProcessor;
+use EngineWP\RelayCore\Import\ColumnMapper;
+use EngineWP\RelayCore\Import\ListingValidator;
+use EngineWP\RelayCore\Import\ListingImporter;
+use EngineWP\RelayCore\Import\ImportLog;
 
 /**
  * Class UploadPage
@@ -263,6 +269,11 @@ class UploadPage {
 			echo '<div class="notice notice-error"><p>Your ID might be wrong. File upload the file again!</p></div>';
 			return;
 		}
+
+		$batch_processor   = new BatchProcessor( new ImportState(), new ReaderFactory(), new ColumnMapper(), new ListingValidator(), new ListingImporter(), new ImportLog() );
+		$background_import = new BackgroundImport( $batch_processor );
+
+		$background_import->start( $import_id );
 
 		$ajax_response = array(
 			'ajaxUrl'  => admin_url( 'admin-ajax.php' ),

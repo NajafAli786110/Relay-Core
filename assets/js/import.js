@@ -1,4 +1,4 @@
-async function runBatch() {
+async function checkStatus() {
     const progressText = document.getElementById('relay-core-progress');
     let result;
 
@@ -30,7 +30,7 @@ async function runBatch() {
         const { offset, total } = result.data;
         const percent = total > 0 ? Math.round(offset / total * 100) : 0;
         progressText.textContent = `${offset} / ${total} rows (${percent}%)`;
-        runBatch();
+        setTimeout( checkStatus, 3000 );
     } else {
         progressText.textContent = `Congratulations Imported Successfully! ${result.data.offset} rows done. Created: ${result.data.created}, Updated: ${result.data.updated}, Failed: ${result.data.failed}`;
     }
@@ -58,4 +58,4 @@ async function runBatch() {
     }
 }
 
-runBatch();
+checkStatus();
