@@ -44,8 +44,8 @@ class ImportAjax {
 	 * @param ImportLog      $import_log Reads the rows that failed during an import.
 	 */
 	public function __construct( BatchProcessor $processor, ImportLog $import_log, ImportState $importState ) {
-		$this->processor  = $processor;
-		$this->import_log = $import_log;
+		$this->processor    = $processor;
+		$this->import_log   = $import_log;
 		$this->import_state = $importState;
 	}
 
@@ -108,11 +108,19 @@ class ImportAjax {
 	}
 
 	public function handle_status() {
-		check_ajax_referer('relay_core_import_batch', 'nonce');
+		check_ajax_referer( 'relay_core_import_batch', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => "You're not capable to perform this action!",
+				),
+				403
+			);
+		}
 
 		$import_id = isset( $_POST['import_id'] ) ? sanitize_text_field( wp_unslash( $_POST['import_id'] ) ) : null;
-		$state = $this->import_state->get( $import_id );
-		
+
 		if ( null === $import_id ) {
 			wp_send_json_error(
 				array(
@@ -121,5 +129,33 @@ class ImportAjax {
 				404
 			);
 		}
+
+		$state = $this->import_state->get( $import_id );
+
+		if ( ! is_array( $result ) || null === $result ) {
+			wp_send_json_error(
+				array(
+					'message' => 'Invalid Import ID',
+				),
+				404
+			);
+		}
+
+		$response = array(
+			'offset'  => $result['offset'],
+			'created' => $result['created'],
+			'updated' => $result['updated'],
+			'failed'  => $result['failed'],
+			'status'  => $result['status'],
+			'total'   => $result['total'] ?? 0,
+		);
+
+		if ( 'done' === $result['status'] ) {
+			$response['errors'] = $this->import_log->get_for_import( $import_id );
+		}
+
+		wp_send_json_success(
+			$response
+		);
 	}
 }

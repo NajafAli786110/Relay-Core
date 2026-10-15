@@ -35,19 +35,21 @@ define( 'RELAY_CORE_FILE', __FILE__ );
 
 $relay_core_plugin = new RelayCorePlugin();
 $relay_core_plugin->run();
-
-$upload_page        = new UploadPage();
 $register_post_type = new RegisterPostType();
 
 $import_log      = new ImportLog();
 $batch_processor = new BatchProcessor( new ImportState(), new ReaderFactory(), new ColumnMapper(), new ListingValidator(), new ListingImporter(), $import_log );
 $import_ajax     = new ImportAjax( $batch_processor, $import_log, new ImportState() );
 
-add_action( 'admin_menu', array( $upload_page, 'register_menu' ) );
 add_action( 'init', array( $register_post_type, 'register' ) );
 add_action( 'wp_ajax_relay_core_import_batch', array( $import_ajax, 'handle_batch' ) );
+add_action( 'wp_ajax_relay_core_import_status', array( $import_ajax, 'handle_status' ) );
 
 register_activation_hook( RELAY_CORE_FILE, array( $import_log, 'create_table' ) );
 
 $background_import = new BackgroundImport( $batch_processor );
+
+$upload_page = new UploadPage( $background_import );
+add_action( 'admin_menu', array( $upload_page, 'register_menu' ) );
+
 add_action( 'relay_core_run_batch', array( $background_import, 'run_batch' ) );

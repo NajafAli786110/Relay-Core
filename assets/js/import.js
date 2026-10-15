@@ -3,7 +3,7 @@ async function checkStatus() {
     let result;
 
     const body = new URLSearchParams({
-        action: 'relay_core_import_batch',
+        action: 'relay_core_import_status',
         nonce: relayCoreImport.nonce,
         import_id: relayCoreImport.importId
     });
