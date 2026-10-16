@@ -30,8 +30,13 @@ class UploadPage {
 	 */
 	private $background_import;
 
-	public function __construct( BackgroundImport $backgroundImport ) {
-		$this->background_import = $backgroundImport;
+	/**
+	 * Constructor.
+	 *
+	 * @param BackgroundImport $background_import Provide function so we can run improts on background.
+	 */
+	public function __construct( BackgroundImport $background_import ) {
+		$this->background_import = $background_import;
 	}
 
 	/**

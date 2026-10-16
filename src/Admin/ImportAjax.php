@@ -7,7 +7,6 @@
 
 namespace EngineWP\RelayCore\Admin;
 
-use EngineWP\RelayCore\Import\BatchProcessor;
 use EngineWP\RelayCore\Import\ImportLog;
 use EngineWP\RelayCore\Import\ImportState;
 
@@ -15,13 +14,6 @@ use EngineWP\RelayCore\Import\ImportState;
  * Handles the AJAX requests that run an import one batch at a time.
  */
 class ImportAjax {
-
-	/**
-	 * Runs one batch of an import.
-	 *
-	 * @var BatchProcessor
-	 */
-	private $processor;
 
 	/**
 	 * Reads the rows that failed during an import.
@@ -40,73 +32,19 @@ class ImportAjax {
 	/**
 	 * Constructor.
 	 *
-	 * @param BatchProcessor $processor  Runs one batch of an import.
-	 * @param ImportLog      $import_log Reads the rows that failed during an import.
+	 * @param ImportLog   $import_log Reads the rows that failed during an import.
+	 * @param ImportState $import_state Provide current state to ensure running or done.
 	 */
-	public function __construct( BatchProcessor $processor, ImportLog $import_log, ImportState $import_state ) {
-		$this->processor    = $processor;
+	public function __construct( ImportLog $import_log, ImportState $import_state ) {
 		$this->import_log   = $import_log;
 		$this->import_state = $import_state;
 	}
 
 	/**
-	 * Processes the next batch of an import and sends its progress as JSON.
-	 *
-	 * Hooked to wp_ajax_relay_core_import_batch. Expects 'nonce' and
-	 * 'import_id' in the request. The response never includes the file path.
+	 * Handle and check eitheir status is done or running.
 	 *
 	 * @return void
 	 */
-	public function handle_batch() {
-		check_ajax_referer( 'relay_core_import_batch', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error(
-				array(
-					'message' => "You're not capable to perform this action!",
-				),
-				403
-			);
-		}
-
-		$import_id = isset( $_POST['import_id'] ) ? sanitize_text_field( wp_unslash( $_POST['import_id'] ) ) : null;
-		if ( null === $import_id ) {
-			wp_send_json_error(
-				array(
-					'message' => 'Invalid Import ID',
-				),
-				404
-			);
-		}
-
-		$result = $this->processor->process( $import_id );
-		if ( ! is_array( $result ) || null === $result ) {
-			wp_send_json_error(
-				array(
-					'message' => 'Invalid Import ID',
-				),
-				404
-			);
-		}
-
-		$response = array(
-			'offset'  => $result['offset'],
-			'created' => $result['created'],
-			'updated' => $result['updated'],
-			'failed'  => $result['failed'],
-			'status'  => $result['status'],
-			'total'   => $result['total'] ?? 0,
-		);
-
-		if ( 'done' === $result['status'] ) {
-			$response['errors'] = $this->import_log->get_for_import( $import_id );
-		}
-
-		wp_send_json_success(
-			$response
-		);
-	}
-
 	public function handle_status() {
 		check_ajax_referer( 'relay_core_import_batch', 'nonce' );
 

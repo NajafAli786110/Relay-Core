@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Plugin Name: Relay Core
  * Description: CSV importer for Listings CPT.
@@ -40,10 +39,9 @@ $register_post_type = new RegisterPostType();
 $import_log      = new ImportLog();
 $import_status   = new ImportState();
 $batch_processor = new BatchProcessor( $import_status, new ReaderFactory(), new ColumnMapper(), new ListingValidator(), new ListingImporter(), $import_log );
-$import_ajax     = new ImportAjax( $batch_processor, $import_log, $import_status );
+$import_ajax     = new ImportAjax( $import_log, $import_status );
 
 add_action( 'init', array( $register_post_type, 'register' ) );
-add_action( 'wp_ajax_relay_core_import_batch', array( $import_ajax, 'handle_batch' ) );
 add_action( 'wp_ajax_relay_core_import_status', array( $import_ajax, 'handle_status' ) );
 
 register_activation_hook( RELAY_CORE_FILE, array( $import_log, 'create_table' ) );
