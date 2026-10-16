@@ -37,8 +37,8 @@ $relay_core_plugin = new RelayCorePlugin();
 $relay_core_plugin->run();
 $register_post_type = new RegisterPostType();
 
-$import_log         = new ImportLog();
-$import_status      = new ImportState();
+$import_log      = new ImportLog();
+$import_status   = new ImportState();
 $batch_processor = new BatchProcessor( $import_status, new ReaderFactory(), new ColumnMapper(), new ListingValidator(), new ListingImporter(), $import_log );
 $import_ajax     = new ImportAjax( $batch_processor, $import_log, $import_status );
 
