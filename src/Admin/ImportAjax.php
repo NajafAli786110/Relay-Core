@@ -46,7 +46,7 @@ class ImportAjax {
 	 * @return void
 	 */
 	public function handle_status() {
-		check_ajax_referer( 'relay_core_import_batch', 'nonce' );
+		check_ajax_referer( 'relay_core_import_status', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(

@@ -273,17 +273,19 @@ class UploadPage {
 			'status'  => 'running',
 		);
 
-		$update_state = $import_state->update( $import_id, $state_changes );
-		if ( false === $update_state ) {
-			echo '<div class="notice notice-error"><p>Your ID might be wrong. File upload the file again!</p></div>';
-			return;
-		}
+		if ( 'pending' === $state['status'] ) {
+			$update_state = $import_state->update( $import_id, $state_changes );
+			if ( false === $update_state ) {
+				echo '<div class="notice notice-error"><p>Your ID might be wrong. File upload the file again!</p></div>';
+				return;
+			}
 
-		$this->background_import->start( $import_id );
+			$this->background_import->start( $import_id );
+		}
 
 		$ajax_response = array(
 			'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
-			'nonce'    => wp_create_nonce( 'relay_core_import_batch' ),
+			'nonce'    => wp_create_nonce( 'relay_core_import_status' ),
 			'importId' => $import_id,
 		);
 
