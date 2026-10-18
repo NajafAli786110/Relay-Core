@@ -29,6 +29,7 @@ use EngineWP\RelayCore\Import\ListingImporter;
 use EngineWP\RelayCore\Import\ReaderFactory;
 use EngineWP\RelayCore\Import\ImportLog;
 use EngineWP\RelayCore\Import\BackgroundImport;
+use EngineWP\RelayCore\Rest\ImportsController;
 
 define( 'RELAY_CORE_FILE', __FILE__ );
 
@@ -36,12 +37,14 @@ $relay_core_plugin = new RelayCorePlugin();
 $relay_core_plugin->run();
 $register_post_type = new RegisterPostType();
 
-$import_log      = new ImportLog();
-$import_state    = new ImportState();
-$batch_processor = new BatchProcessor( $import_state, new ReaderFactory(), new ColumnMapper(), new ListingValidator(), new ListingImporter(), $import_log );
-$import_ajax     = new ImportAjax( $import_log, $import_state );
+$import_log        = new ImportLog();
+$import_state      = new ImportState();
+$import_controller = new ImportsController( $import_state );
+$batch_processor   = new BatchProcessor( $import_state, new ReaderFactory(), new ColumnMapper(), new ListingValidator(), new ListingImporter(), $import_log );
+$import_ajax       = new ImportAjax( $import_log, $import_state );
 
 add_action( 'init', array( $register_post_type, 'register' ) );
+add_action( 'rest_api_init', array( $import_controller, 'register_routes' ) );
 add_action( 'wp_ajax_relay_core_import_status', array( $import_ajax, 'handle_status' ) );
 
 register_activation_hook( RELAY_CORE_FILE, array( $import_log, 'create_table' ) );

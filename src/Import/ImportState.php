@@ -12,7 +12,25 @@ namespace EngineWP\RelayCore\Import;
  */
 class ImportState {
 
+	public function all() {
+		global $wpdb;
 
+		$prefix = 'relay_core_import_';
+
+		$search_term = $wpdb->esc_like( $prefix ) . '%';
+
+		$results = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT option_name, option_value 
+				FROM {$wpdb->options} 
+				WHERE option_name LIKE %s 
+				ORDER BY created_at DESC",
+				$search_term
+			)
+		);
+
+		return $results;
+	}
 
 	/**
 	 * Creates a new import state.
