@@ -13,7 +13,7 @@ class ImportsController {
 
 	public function register_routes() {
 		register_rest_route(
-			'/relay-core/v1',
+			'relay-core/v1',
 			'/imports',
 			array(
 				'methods'             => 'GET',
@@ -25,7 +25,7 @@ class ImportsController {
 		);
 
 		register_rest_route(
-			'/relay-core/v1',
+			'relay-core/v1',
 			'/imports/(?P<id>[a-f0-9]{64})',
 			array(
 				'methods'             => 'GET',
@@ -37,7 +37,7 @@ class ImportsController {
 		);
 
 		register_rest_route(
-			'/relay-core/v1',
+			'relay-core/v1',
 			'/imports/(?P<id>[a-f0-9]{64})/logs',
 			array(
 				'methods'             => 'GET',
