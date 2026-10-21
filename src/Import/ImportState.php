@@ -12,6 +12,15 @@ namespace EngineWP\RelayCore\Import;
  */
 class ImportState {
 
+	/**
+	 * Returns every saved import, newest first.
+	 *
+	 * Each item has the import ID and its full state, including the file path,
+	 * so internal code can use it. Callers that send data to the browser must
+	 * remove private fields themselves.
+	 *
+	 * @return array[] List of arrays with 'id' and 'state' keys. Empty if there are no imports.
+	 */
 	public function all() {
 		global $wpdb;
 
@@ -19,17 +28,28 @@ class ImportState {
 
 		$search_term = $wpdb->esc_like( $prefix ) . '%';
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- No WordPress API lists options by name prefix.
 		$results = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT option_name, option_value 
-				FROM {$wpdb->options} 
-				WHERE option_name LIKE %s 
-				ORDER BY created_at DESC",
+				"SELECT option_name, option_value
+        FROM {$wpdb->options}
+        WHERE option_name LIKE %s
+        ORDER BY option_id DESC",
 				$search_term
 			)
 		);
 
-		return $results;
+		$imports = array();
+
+		foreach ( $results as $row ) {
+			$data      = maybe_unserialize( $row->option_value );
+			$imports[] = array(
+				'id'    => substr( $row->option_name, strlen( $prefix ) ),
+				'state' => $data,
+			);
+		}
+
+		return $imports;
 	}
 
 	/**

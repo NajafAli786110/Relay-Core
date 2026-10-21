@@ -39,7 +39,7 @@ $register_post_type = new RegisterPostType();
 
 $import_log        = new ImportLog();
 $import_state      = new ImportState();
-$import_controller = new ImportsController( $import_state );
+$import_controller = new ImportsController( $import_state, $import_log );
 $batch_processor   = new BatchProcessor( $import_state, new ReaderFactory(), new ColumnMapper(), new ListingValidator(), new ListingImporter(), $import_log );
 $import_ajax       = new ImportAjax( $import_log, $import_state );
 

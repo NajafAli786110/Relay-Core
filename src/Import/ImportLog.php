@@ -81,16 +81,36 @@ class ImportLog {
 	 *
 	 * @param string $import_id ID of the import.
 	 * @param int    $limit     Maximum number of rows to return.
+	 * @param int    $offset    Number of rows to skip before the first returned row.
 	 * @return array[] List of rows, each with row_num, field and message.
 	 */
-	public function get_for_import( string $import_id, int $limit = 100 ) {
+	public function get_for_import( string $import_id, int $limit = 100, $offset = 0 ) {
 		global $wpdb;
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; read once when an import finishes.
 		$result = $wpdb->get_results(
-			$wpdb->prepare( 'SELECT row_num, field, message FROM %i WHERE import_id = %s ORDER BY row_num ASC LIMIT %d', $this->table_name(), $import_id, $limit ),
+			$wpdb->prepare( 'SELECT row_num, field, message FROM %i WHERE import_id = %s ORDER BY row_num ASC LIMIT %d OFFSET %d', $this->table_name(), $import_id, $limit, $offset ),
 			ARRAY_A
 		);
 
 		return $result;
+	}
+
+	/**
+	 * Counts the failed rows of one import.
+	 *
+	 * @param string $import_id ID of the import.
+	 * @return int Number of failed rows, 0 if there are none.
+	 */
+	public function count_for_import( string $import_id ) {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table.
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				'SELECT count(*) from %i WHERE import_id = %s',
+				$this->table_name(),
+				$import_id
+			)
+		);
 	}
 }
