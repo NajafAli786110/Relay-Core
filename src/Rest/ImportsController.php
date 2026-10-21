@@ -112,10 +112,10 @@ class ImportsController {
 	}
 
 	/**
-	 * Returns one import without its file path.
+	 * Returns the public fields of one import.
 	 *
 	 * @param string $id Import ID.
-	 * @return array|WP_Error The import state, or a 404 error if it does not exist.
+	 * @return array|WP_Error The import, or a 404 error if it does not exist.
 	 */
 	public function get_by_id_res( string $id ) {
 		$state = $this->import_state->get( $id );
@@ -124,15 +124,15 @@ class ImportsController {
 			return new WP_Error( 'relay_core_not_found', 'Request not valid!', array( 'status' => 404 ) );
 		}
 
-		unset( $state['file_path'] );
+		$filtered_state = $this->create_field( $id, $state );
 
-		return $state;
+		return $filtered_state;
 	}
 
 	/**
-	 * Returns all imports, newest first, without their file paths.
+	 * Returns the public fields of every import, newest first.
 	 *
-	 * @return array[]|WP_Error List of imports, each with an id and its state.
+	 * @return array[]|WP_Error List of imports in the same shape as a single import. Empty if there are none.
 	 */
 	public function get_all() {
 		$state = $this->import_state->all();
@@ -144,12 +144,8 @@ class ImportsController {
 		$filtered_array = array();
 
 		foreach ( $state as $row ) {
-			unset( $row['state']['file_path'] );
-
-			$filtered_array[] = array(
-				'id'    => $row['id'],
-				'state' => $row['state'],
-			);
+			$state            = $row['state'];
+			$filtered_array[] = $this->create_field( $row['id'], $state );
 		}
 
 		return $filtered_array;
@@ -200,6 +196,29 @@ class ImportsController {
 			'total'    => $total,
 			'page'     => $page,
 			'per_page' => $per_page,
+		);
+	}
+
+	/**
+	 * Builds the public shape of one import for API responses.
+	 *
+	 * Only the fields listed here are sent to the browser. Any other key in
+	 * the saved state, such as the file path, is left out.
+	 *
+	 * @param string $id    Import ID.
+	 * @param array  $state Full saved state of the import.
+	 * @return array Import ID, status, progress counters and creation time.
+	 */
+	private function create_field( string $id, array $state ) {
+		return array(
+			'id'         => $id,
+			'status'     => $state['status'] ?? '',
+			'offset'     => $state['offset'] ?? 0,
+			'total'      => $state['total'] ?? 0,
+			'created'    => $state['created'] ?? 0,
+			'updated'    => $state['updated'] ?? 0,
+			'failed'     => $state['failed'] ?? 0,
+			'created_at' => $state['created_at'] ?? 0,
 		);
 	}
 }
