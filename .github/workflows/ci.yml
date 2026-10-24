@@ -25,3 +25,9 @@ jobs:
 
       - name: Run tests
         run: vendor/bin/phpunit
+  
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say Hello
+        run: "Hello from the second job"
