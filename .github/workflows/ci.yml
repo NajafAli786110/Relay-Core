@@ -51,5 +51,8 @@ jobs:
       - name: Run WordPress
         run: npx wp-env start
 
+      - name: Show plugin folder
+        run: npx wp-env run tests-cli ls wp-content/plugins
+
       - name: Run command
-        run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/relay-core vendor/bin/phpunit -c phpunit-integration.xml.dist
+        run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/Relay-Core vendor/bin/phpunit -c phpunit-integration.xml.dist
