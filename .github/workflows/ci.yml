@@ -25,8 +25,31 @@ jobs:
 
       - name: Run tests
         run: vendor/bin/phpunit
-  hello:
+
+  integration-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Say Hello
-        run: echo "Hello from the second job"
+      - name: Download the code
+        uses: actions/checkout@v4
+      
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Install composer packages
+        run: composer install --no-progress
+
+      - name: Install node for npm
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Download the exact version
+        run: npm ci
+
+      - name: Run WordPress
+        run: npx wp-env start
+
+      - name: Run command
+        run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/relay-core vendor/bin/phpunit -c phpunit-integration.xml.dist
