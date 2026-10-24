@@ -92,7 +92,7 @@ class ImportsController {
 					return $this->get_logs_by_id( $request );
 				},
 				'permission_callback' => function () {
-					return '__return_true';
+					return current_user_can( 'manage_options' );
 				},
 				'args'                => array(
 					'page'     => array(
