@@ -68,4 +68,36 @@ class ImportsRestTest extends WP_UnitTestCase {
 
         $this->assertSame( array(), $response->get_data() );
     }
+
+    public static function providePermissionCases() {
+        $hex_character_64 = str_repeat( 'a', 64 );
+        return array(
+            array( '/relay-core/v1/imports', 'logged_out', 401 ),
+            array( '/relay-core/v1/imports', 'subscriber', 403 ),
+            array( "/relay-core/v1/imports/{$hex_character_64}", 'logged_out', 401 ),
+            array( "/relay-core/v1/imports/{$hex_character_64}", 'subscriber', 403 ),
+            array( "/relay-core/v1/imports/{$hex_character_64}/logs", 'logged_out', 401 ),
+            array( "/relay-core/v1/imports/{$hex_character_64}/logs", 'subscriber', 403 ),
+        );
+    }
+
+    /**
+     * @dataProvider providePermissionCases
+     */
+    public function test_only_admin_can_see_logs( string $route, string $role, int $status ) {
+        if ( 'logged_out' !== $role ) {
+            $subscriber_id = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+            wp_set_current_user( $subscriber_id );
+
+            $request = new WP_REST_Request( "GET", $route );
+            $response = rest_do_request( $request );
+
+            $this->assertEquals( $status, $response->get_status() );
+        }
+
+        $request = new WP_REST_Request( "GET", $route );
+        $response = rest_do_request( $request );
+
+        $this->assertEquals( $status, $response->get_status() );
+    }
 }
