@@ -19,29 +19,18 @@ class ListingImporter {
 	 * Imports a listing.
 	 *
 	 * @param array $listing The listing to import.
+	 * @param int   $existing_id Id of the exisitng post, so we can verify create or update.
 	 */
-	public function import( array $listing ) {
+	public function import( array $listing, int $existing_id ) {
 		$post_title          = isset( $listing['post_title'] ) ? sanitize_text_field( $listing['post_title'] ) : '';
 		$external_id         = isset( $listing['external_id'] ) ? sanitize_text_field( $listing['external_id'] ) : '';
 		$meta                = isset( $listing['meta'] ) && is_array( $listing['meta'] ) ? $this->sanitize_meta( $listing['meta'] ) : array();
 		$meta['external_id'] = $external_id;
 
-		$existing_post = get_posts(
-			array(
-				'post_type'      => 'listing',
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- external_id lookup, small dataset.
-				'meta_key'       => 'external_id',
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- external_id lookup, small dataset.
-				'meta_value'     => $external_id,
-				'posts_per_page' => 1,
-				'fields'         => 'ids',
-			)
-		);
-
-		if ( ! empty( $existing_post ) ) {
+		if ( 0 !== $existing_id ) {
 			$post_id = wp_update_post(
 				array(
-					'ID'         => $existing_post[0],
+					'ID'         => $existing_id,
 					'post_title' => $post_title,
 					'meta_input' => $meta,
 				)
@@ -112,5 +101,48 @@ class ListingImporter {
 			}
 		}
 		return $sanitized_meta;
+	}
+
+	/**
+	 * Finds which external IDs already belong to a listing.
+	 *
+	 * Runs one query for the whole batch, so the importer does not have to
+	 * look up each row on its own. Drafts are included; other post types are not.
+	 *
+	 * @param string[] $ids External IDs from one batch.
+	 * @return int[] Post IDs keyed by external ID. IDs with no listing are left out.
+	 */
+	public function find_existing_ids( array $ids ) {
+		global $wpdb;
+
+		if ( ! is_array( $ids ) || empty( $ids ) ) {
+			return array();
+		}
+
+		$placeholder = implode( ',', array_fill( 0, count( $ids ), '%s' ) );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- One lookup per batch; $placeholder holds only %s placeholders, the values go through prepare().
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT m.post_id, m.meta_value 
+			FROM $wpdb->posts p
+			JOIN $wpdb->postmeta m
+			ON p.ID = m.post_id
+			WHERE post_type = 'listing' 
+			AND m.meta_key = 'external_id' 
+			AND meta_value IN ($placeholder)
+			",
+				$ids
+			),
+			ARRAY_A
+		);
+		// phpcs:enable
+
+		$result = array();
+		foreach ( $rows as $row ) {
+			$result[ $row['meta_value'] ] = (int) $row['post_id'];
+		}
+
+		return $result;
 	}
 }

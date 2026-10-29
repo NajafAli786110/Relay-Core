@@ -126,32 +126,54 @@ class BatchProcessor {
 		$failed    = 0;
 		$status    = '';
 
-		foreach ( $rows as $row ) {
+		$batch   = array();
+		$ext_ids = array();
+		foreach ( $rows as $item ) {
 			++$seen;
 			if ( $seen <= $offset ) {
 				continue;
 			}
-
-			$row_validate = $this->validator->validate( $row )[0];
-			if ( false === $row_validate['valid'] ) {
-				++$failed;
-				$this->log->add( $import_id, $row_validate['error']['row_number'], $row_validate['error']['field'], $row_validate['error']['message'] );
-
-			} else {
-				$row_import = $this->importer->import( $row );
-				if ( false === $row_import['success'] ) {
-					++$failed;
-					$this->log->add( $import_id, $row['row_number'], '', $row_import['error'] );
-				} elseif ( 'updated' === $row_import['action'] ) {
-					++$updated;
-				} else {
-					++$created;
-				}
-			}
+			$batch[]   = $item;
+			$ext_ids[] = trim( $item['external_id'] );
 
 			++$processed;
 			if ( $processed >= $batch_size ) {
 				break;
+			}
+		}
+
+		$existing_ids = $this->importer->find_existing_ids( $ext_ids );
+
+		foreach ( $batch as $item ) {
+			$row_validate = $this->validator->validate( $item )[0];
+			if ( false === $row_validate['valid'] ) {
+				++$failed;
+				$this->log->add(
+					$import_id,
+					$row_validate['error']['row_number'],
+					$row_validate['error']['field'],
+					$row_validate['error']['message']
+				);
+
+			} else {
+				$existing_post_id    = 0;
+				$trimmed_external_id = trim( $item['external_id'] );
+
+				if ( isset( $existing_ids[ $trimmed_external_id ] ) ) {
+					$existing_post_id = $existing_ids[ $trimmed_external_id ];
+				}
+
+				$row_import = $this->importer->import( $item, $existing_post_id );
+
+				if ( false === $row_import['success'] ) {
+					++$failed;
+					$this->log->add( $import_id, $item['row_number'], '', $row_import['error'] );
+				} elseif ( 'updated' === $row_import['action'] ) {
+					++$updated;
+				} else {
+					++$created;
+					$existing_ids[ $trimmed_external_id ] = $row_import['post_id'];
+				}
 			}
 		}
 
