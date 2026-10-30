@@ -119,24 +119,23 @@ class ListingImporter {
 			return array();
 		}
 
-		$placeholder = implode( ',', array_fill( 0, count( $ids ), '%s' ) );
+		$placeholder = implode( ', ', array_fill( 0, count( $ids ), '%s' ) );
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- One lookup per batch; $placeholder holds only %s placeholders, the values go through prepare().
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT m.post_id, m.meta_value 
-			FROM $wpdb->posts p
-			JOIN $wpdb->postmeta m
-			ON p.ID = m.post_id
-			WHERE post_type = 'listing' 
-			AND m.meta_key = 'external_id' 
-			AND meta_value IN ($placeholder)
-			",
+				FROM $wpdb->posts p
+				JOIN $wpdb->postmeta m
+				ON p.ID = m.post_id
+				WHERE post_type = 'listing'
+				AND m.meta_key = 'external_id'
+				AND m.meta_value IN ( $placeholder )
+				",
 				$ids
 			),
 			ARRAY_A
 		);
-		// phpcs:enable
 
 		$result = array();
 		foreach ( $rows as $row ) {
