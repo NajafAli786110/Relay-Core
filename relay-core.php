@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/vendor/woocommerce/action-scheduler/action-scheduler.php';
 
-use EngineWP\RelayCore\RelayCorePlugin;
 use EngineWP\RelayCore\Admin\UploadPage;
 use EngineWP\RelayCore\RegisterPostType;
 use EngineWP\RelayCore\Import\BatchProcessor;
@@ -33,8 +32,6 @@ use EngineWP\RelayCore\Rest\ImportsController;
 
 define( 'RELAY_CORE_FILE', __FILE__ );
 
-$relay_core_plugin = new RelayCorePlugin();
-$relay_core_plugin->run();
 $register_post_type = new RegisterPostType();
 
 $import_log        = new ImportLog();
