@@ -184,11 +184,12 @@ class BatchProcessor {
 		}
 
 		$changes = array(
-			'offset'  => $offset + $processed,
-			'updated' => $prev_updated_number + $updated,
-			'created' => $prev_created_number + $created,
-			'failed'  => $prev_failed_number + $failed,
-			'status'  => $status,
+			'offset'     => $offset + $processed,
+			'updated'    => $prev_updated_number + $updated,
+			'created'    => $prev_created_number + $created,
+			'failed'     => $prev_failed_number + $failed,
+			'status'     => $status,
+			'updated_at' => time(),
 		);
 
 		$this->state->update( $import_id, $changes );

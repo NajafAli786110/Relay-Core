@@ -64,6 +64,7 @@ class ImportState {
 		$new_data = array_merge(
 			array(
 				'created_at' => time(),
+				'updated_at' => time(),
 			),
 			$data
 		);
