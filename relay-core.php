@@ -29,6 +29,7 @@ use EngineWP\RelayCore\Import\ReaderFactory;
 use EngineWP\RelayCore\Import\ImportLog;
 use EngineWP\RelayCore\Import\BackgroundImport;
 use EngineWP\RelayCore\Rest\ImportsController;
+use EngineWP\RelayCore\Import\StuckImportChecker;
 
 define( 'RELAY_CORE_FILE', __FILE__ );
 
@@ -46,9 +47,22 @@ add_action( 'wp_ajax_relay_core_import_status', array( $import_ajax, 'handle_sta
 
 register_activation_hook( RELAY_CORE_FILE, array( $import_log, 'create_table' ) );
 
-$background_import = new BackgroundImport( $batch_processor );
+$background_import    = new BackgroundImport( $batch_processor );
+$stuck_import_checker = new StuckImportChecker( $import_state, $background_import );
 
 $upload_page = new UploadPage( $background_import );
 add_action( 'admin_menu', array( $upload_page, 'register_menu' ) );
 
 add_action( 'relay_core_run_batch', array( $background_import, 'run_batch' ) );
+add_action( 'relay_core_check_stuck', array( $stuck_import_checker, 'run' ) );
+
+add_action(
+	'init',
+	function () {
+		$is_scheduled = as_has_scheduled_action( 'relay_core_check_stuck', array(), 'relay-core' );
+
+		if ( ! $is_scheduled ) {
+			as_schedule_recurring_action( time(), 5 * MINUTE_IN_SECONDS, 'relay_core_check_stuck', array(), 'relay-core', true );
+		}
+	}
+);

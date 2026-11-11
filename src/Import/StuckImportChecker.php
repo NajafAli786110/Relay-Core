@@ -69,6 +69,7 @@ class StuckImportChecker {
 		if ( 'running' !== $state['status'] ) {
 			return;
 		}
+
 		if ( self::STUCK_AFTER > time() - $state['updated_at'] ) {
 			return;
 		}
@@ -96,6 +97,21 @@ class StuckImportChecker {
 			);
 
 			$this->import_state->update( $import_id, $changes );
+		}
+	}
+
+    /**
+	 * Run check_status on all the imports states we have, this is use for recurring but also can use for other, just to track all in good place.
+	 *
+	 * @return void
+	 */
+	public function run(): void {
+		$imports = $this->import_state->all();
+
+		foreach ( $imports as $import ) {
+			$import_id = $import['id'];
+
+			$this->check_stuck( $import_id );
 		}
 	}
 }
