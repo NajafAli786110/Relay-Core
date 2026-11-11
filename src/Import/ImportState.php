@@ -65,6 +65,7 @@ class ImportState {
 			array(
 				'created_at' => time(),
 				'updated_at' => time(),
+				'retries'    => 0,
 			),
 			$data
 		);
