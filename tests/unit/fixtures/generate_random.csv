@@ -1,0 +1,500 @@
+id,business_name,city,phone,category,rating
+1,Metro Link Traders,Taxila,3001234572,Restaurant,0.6
+2,Royal Vision Group,Kot Addu,3001234579,Leather Goods Store,4.5
+3,Starline Marketing,Mardan,3001234512,Microfinance Institution,2.8
+4,Elite Choice Solutions,Swabi,3001234593,Restaurant,3.6
+5,Golden Touch Enterprises,Larkana,3001234532,Shopping Mall,2.4
+6,Silver Star Traders,Kohat,3001234519,Digital Marketing Agency,4.4
+7,Next Wave Enterprises,Mandi Bahauddin,3001234548,Veterinary Clinic,1.3
+8,Digital World Solutions,Chiniot,3001234539,Law Firm,5
+9,Global Link Traders,Loralai,3001234576,Fitness Center,4.3
+10,Global Tech Solutions,Ghotki,3001234583,Courier Service,3.2
+11,Peak Performance Group,Kalat,3001234569,Real Estate Agency,2.1
+12,New Horizon Enterprises,Murree,3001234509,Bakery,3.3
+13,Digital World Solutions,Tank,3001234542,Pest Control,0.8
+14,Al Noor Traders,Mingora,3001234510,Solar Energy Company,4
+15,Smart Zone Services,Ghotki,3001234533,Computer Shop,0.2
+16,Classic Traders,Hyderabad,3001234574,Coaching Center,0.1
+17,Diamond Edge Services,Murree,3001234533,Hospital,4.6
+18,Premier Solutions,Faisalabad,3001234534,Construction Company,4.3
+19,Infinity Traders,Vehari,3001234587,Tax Consultancy,3
+20,Future Link Services,Islamabad,3001234519,Interior Design,0.6
+21,Urban Retail Store,Okara,3001234574,Manpower Agency,2.8
+22,Starline Marketing,Charsadda,3001234527,School,3.9
+23,Perfect Vision Services,Sialkot,3001234534,Art Gallery,1.7
+24,Al Hamza Traders,Haripur,3001234571,Fitness Center,1.9
+25,Bright Path Services,Gujrat,3001234577,Fitness Center,4.6
+26,Metro Business Center,Wah Cantt,3001234580,Optical Store,5
+27,Bright Star Marketing,Lodhran,3001234528,Real Estate Agency,1.3
+28,Vision Plus Group,Bhakkar,3001234552,E-commerce Store,0.2
+29,Bright Future Group,Jhelum,3001234534,Veterinary Clinic,3.9
+30,Golden Crown Traders,Attock,3001234508,Sweet Shop,3.1
+31,Capital Star Services,Battagram,3001234580,Pest Control,1.4
+32,Global Star Marketing,Umerkot,3001234590,Electrical Service,0.6
+33,Prime Star Enterprises,Chaman,3001234510,Mobile Accessories Store,2.5
+34,Elite Choice Solutions,Pakpattan,3001234505,Car Dealership,3.6
+35,Urban Star Traders,Umerkot,3001234577,Electrical Service,3.3
+36,Perfect Choice Enterprises,Lahore,3001234522,Solar Energy Company,4.2
+37,United Marketing Group,Abbottabad,3001234591,Car Rental,2
+38,Global Tech Solutions,Abbottabad,3001234554,Security Services,1.2
+39,Golden Services,Murree,3001234581,Shopping Mall,4.6
+40,Golden Gate Enterprises,Quetta,3001234579,Dry Cleaning,1.3
+41,First Choice Enterprises,Karachi,3001234534,Travel Agency,2.8
+42,Future Vision Group,Dadu,3001234578,Optical Store,4.3
+43,Al Rehman Enterprises,Dadu,3001234584,Dental Clinic,2.1
+44,City Star Solutions,Khanpur,3001234522,Mobile Accessories Store,1.1
+45,Silver Line Enterprises,Dadu,3001234566,Diagnostic Laboratory,2.5
+46,Smart Future Solutions,Dera Ghazi Khan,3001234536,Auto Parts Store,1.9
+47,Diamond Edge Services,Kalat,3001234581,Sweet Shop,0.3
+48,Perfect Vision Services,Thatta,3001234513,Shopping Mall,0.1
+49,City Connect Services,Sheikhupura,3001234516,Mobile Accessories Store,3
+50,Elite Vision Enterprises,Jacobabad,3001234548,Tailoring Shop,3.4
+51,Elite Vision Enterprises,Kamoke,3001234567,Retail Store,1
+52,Sunrise Business Hub,Kot Addu,3001234568,Gift Shop,3
+53,Alpha Business Group,Mansehra,3001234525,Cleaning Service,1.1
+54,Starline Marketing,Sanghar,3001234518,Pest Control,4.7
+55,Vision Plus Group,Lahore,3001234545,Pet Shop,1.3
+56,Digital World Solutions,Burewala,3001234505,School,0.1
+57,Infinity Traders,Pakpattan,3001234577,Car Dealership,4.5
+58,Smart Zone Services,Talagang,3001234579,Graphic Design,2.6
+59,Royal Traders,Faisalabad,3001234501,Architecture Firm,0.5
+60,Next Generation Solutions,Kohat,3001234588,Dental Clinic,2.6
+61,Royal Edge Solutions,Layyah,3001234508,Coaching Center,1.2
+62,Global Vision Group,Dunyapur,3001234524,Auto Repair Shop,4.1
+63,Perfect Choice Enterprises,Rawalpindi,3001234552,Laundry Service,3.5
+64,Blue Ocean Traders,Pakpattan,3001234552,Dental Clinic,3
+65,Blue Wave Solutions,Bahawalpur,3001234503,Cafe,4.2
+66,Elite Vision Enterprises,Dera Ismail Khan,3001234544,Gym,1.2
+67,Bright Star Marketing,Chakwal,3001234537,Shipping Company,0.9
+68,Elite Marketing,Mardan,3001234565,Toy Store,2.9
+69,Smart Choice Store,Bahawalpur,3001234596,Auto Parts Store,4.1
+70,Elite Marketing,Tank,3001234552,Shoe Store,0.4
+71,Sunshine Enterprises,Lakki Marwat,3001234598,Shopping Mall,0.5
+72,Diamond Enterprises,Ghotki,3001234568,Gift Shop,1.6
+73,Diamond Enterprises,Mingora,3001234587,E-commerce Store,4.3
+74,Modern Edge Marketing,Sialkot,3001234531,Cafe,1.2
+75,Urban Edge Solutions,Mirpur Khas,3001234584,Cleaning Service,3.4
+76,Future Vision Group,Battagram,3001234570,Tax Consultancy,1.4
+77,Digital World Solutions,Rawalpindi,3001234575,Bookstore,1.6
+78,Royal Vision Group,Turbat,3001234512,Shopping Mall,0.8
+79,Alpha Business Group,Jhang,3001234522,Mobile Accessories Store,4.8
+80,Green Valley Enterprises,Tando Adam,3001234582,Tax Consultancy,2.9
+81,First Choice Enterprises,Mardan,3001234519,Cafe,4.1
+82,Top Choice Enterprises,Muzaffargarh,3001234581,Insurance Agency,2.6
+83,Crown Traders,Pishin,3001234567,Shopping Mall,4
+84,Global Link Traders,Lodhran,3001234570,Mobile Accessories Store,1.4
+85,Diamond Enterprises,Thatta,3001234542,Gym,1.8
+86,Fast Track Services,Islamabad,3001234533,Barber Shop,0
+87,Sunshine Enterprises,Chakwal,3001234558,Clothing Store,0.9
+88,First Choice Enterprises,Sukkur,3001234595,AC Repair Service,2.8
+89,Next Generation Solutions,Mansehra,3001234555,Hardware Store,1.8
+90,Classic Traders,Rawalpindi,3001234566,Spa,2.4
+91,Metro Link Traders,Pattoki,3001234581,Spa,4.6
+92,Green Valley Enterprises,Bhakkar,3001234516,Mobile Shop,0.4
+93,United Star Traders,Bahawalpur,3001234557,Petrol Station,3.8
+94,Diamond Point Store,Kot Addu,3001234559,Digital Marketing Agency,3.1
+95,Trust Worthy Traders,Bahawalpur,3001234555,Veterinary Clinic,3.8
+96,Global Vision Group,Muzaffargarh,3001234528,Bank,3.7
+97,Bright Star Marketing,Mandi Bahauddin,3001234568,Furniture Store,3.9
+98,Universal Business Hub,Jhelum,3001234504,Shipping Company,2.2
+99,Capital Enterprises,Kot Addu,3001234538,Interior Design,3.4
+100,United Marketing Group,Karachi,3001234501,Consulting Firm,2.6
+101,Prime Link Traders,Toba Tek Singh,3001234541,Consulting Firm,0.2
+102,City Star Solutions,Pishin,3001234528,Coaching Center,0.6
+103,Blue Wave Solutions,Renala Khurd,3001234507,Hospital,4.1
+104,Top Choice Enterprises,Sialkot,3001234591,Mobile Accessories Store,1.6
+105,City Star Solutions,Ghotki,3001234567,Courier Service,1.9
+106,Top Choice Enterprises,Gujrat,3001234596,Leather Goods Store,0.9
+107,Sunshine Enterprises,Khanewal,3001234563,Hotel,1.3
+108,Sunshine Enterprises,Depalpur,3001234527,Plumbing Service,0.8
+109,Visionary Business Group,Pakpattan,3001234528,Tailoring Shop,1.9
+110,Sunrise Business Hub,Chaman,3001234593,Grocery Store,5
+111,Global Link Traders,Murree,3001234546,Furniture Store,0.9
+112,First Choice Enterprises,Khanewal,3001234590,AC Repair Service,0.1
+113,Diamond Edge Services,Renala Khurd,3001234521,Educational Institute,1.2
+114,Bright Star Marketing,Pakpattan,3001234515,Logistics Company,3.7
+115,Trust Point Services,Mianwali,3001234594,Water Treatment,2.1
+116,Prime Link Traders,Dera Ghazi Khan,3001234503,Shipping Company,1.9
+117,City Point Marketing,Shikarpur,3001234528,Hardware Store,3.1
+118,Blue Wave Solutions,Jhang,3001234518,College,0.7
+119,New Horizon Enterprises,Rajanpur,3001234583,Poultry Farm,0
+120,Al Noor Traders,Kot Addu,3001234501,Auto Repair Shop,0.6
+121,Prime Edge Services,Umerkot,3001234576,Jewelry Store,0.3
+122,Urban Retail Store,Lahore,3001234588,Medical Clinic,3.4
+123,Smart Zone Services,Kot Addu,3001234545,Real Estate Agency,3.1
+124,Rapid Link Enterprises,Rahim Yar Khan,3001234506,Watch Store,1.2
+125,Capital Star Services,Pakpattan,3001234516,Auto Repair Shop,0.6
+126,Urban Edge Solutions,Chakwal,3001234596,Grocery Store,3.7
+127,Bright Path Services,Tank,3001234600,Software House,1.7
+128,Success Point Solutions,Kohat,3001234535,Cleaning Service,4.5
+129,Royal Edge Solutions,Mianwali,3001234526,Dry Cleaning,1.6
+130,Bright World Traders,Depalpur,3001234572,Pharmacy,4.8
+131,Golden Services,Thatta,3001234586,Pest Control,2.1
+132,Universal Business Hub,Lodhran,3001234551,Cleaning Service,3.9
+133,Capital Enterprises,Peshawar,3001234548,Sweet Shop,3.7
+134,Trust Worthy Traders,Murree,3001234590,Car Rental,1.8
+135,Mega Mart,Rajanpur,3001234532,Car Rental,3
+136,Perfect Vision Services,Lakki Marwat,3001234509,Car Dealership,4.6
+137,Capital Star Services,Renala Khurd,3001234584,Fast Food Restaurant,2.2
+138,Golden Crown Traders,Dera Ismail Khan,3001234537,Jewelry Store,0.4
+139,Digital Edge Solutions,Rajanpur,3001234514,Construction Company,4
+140,Crown Traders,Tando Adam,3001234564,Law Firm,1.6
+141,Al Noor Traders,Peshawar,3001234588,Dry Cleaning,3.4
+142,United Marketing Group,Wah Cantt,3001234503,Pet Shop,2.4
+143,Perfect Vision Services,Dera Ghazi Khan,3001234501,IT Services,2.2
+144,Diamond Point Store,Khanewal,3001234546,Agriculture Business,0.2
+145,Urban Star Traders,Tando Adam,3001234575,Hotel,1.7
+146,Fast Track Services,Mandi Bahauddin,3001234501,E-commerce Store,1.9
+147,Al Madina Enterprises,Zhob,3001234575,Real Estate Agency,2.5
+148,Vision Plus Group,Turbat,3001234508,Stationery Shop,2.9
+149,Capital Enterprises,Bhakkar,3001234581,Software House,0
+150,Blue Ocean Traders,Dera Ghazi Khan,3001234577,Clothing Store,4
+151,Prime Business Hub,Kot Addu,3001234542,Agriculture Business,0.8
+152,Royal Traders,Gujranwala,3001234546,Web Development,4.6
+153,Global Tech Solutions,Taxila,3001234588,Tour Operator,2.4
+154,Universal Business Hub,Khairpur,3001234551,Bakery,3.6
+155,Alpha Star Traders,Mansehra,3001234588,Bookstore,2.1
+156,Starline Marketing,Vehari,3001234574,Jewelry Store,5
+157,Modern Edge Marketing,Tando Allahyar,3001234527,Video Production,3.4
+158,Silver Star Traders,Arifwala,3001234571,Interior Design,4.1
+159,Bright Path Services,Quetta,3001234559,Agriculture Business,5
+160,Vision Plus Group,Khanewal,3001234598,Restaurant,2
+161,Digital Edge Solutions,Daska,3001234570,Dairy Farm,3.8
+162,Al Rehman Enterprises,Mingora,3001234548,Stationery Shop,2.4
+163,Next Generation Solutions,Sanghar,3001234528,Tax Consultancy,3.4
+164,Rapid Solutions,Okara,3001234566,Catering Service,0.7
+165,Fast Track Services,Arifwala,3001234539,Shipping Company,0.6
+166,Al Madina Enterprises,Loralai,3001234519,Property Dealer,0.7
+167,Royal Choice Store,Mandi Bahauddin,3001234514,Car Rental,5
+168,Smart World Traders,Bhakkar,3001234539,Property Dealer,0.6
+169,Fast Track Services,Zhob,3001234516,Construction Company,1.5
+170,Royal Choice Store,Arifwala,3001234581,Clothing Store,2.1
+171,Urban Retail Store,Lakki Marwat,3001234557,Graphic Design,2.2
+172,Sunshine Enterprises,Khushab,3001234547,Medical Clinic,4.5
+173,Diamond Enterprises,Rahim Yar Khan,3001234562,Optical Store,4
+174,Digital World Solutions,Taunsa,3001234540,Tax Consultancy,0.5
+175,Prime Star Enterprises,Taunsa,3001234541,Educational Institute,3.4
+176,Al Noor Traders,Daska,3001234541,Guest House,2.9
+177,Global Vision Group,Shakargarh,3001234517,Beauty Salon,4.5
+178,Rapid Link Enterprises,Bahawalpur,3001234549,Advertising Agency,1.7
+179,Smart Future Solutions,Hyderabad,3001234534,Medical Clinic,0
+180,Modern Edge Marketing,Taxila,3001234547,Guest House,3.8
+181,Modern Edge Marketing,Jhelum,3001234537,Courier Service,1
+182,Rapid Solutions,Arifwala,3001234529,Retail Store,1.4
+183,Prime Star Enterprises,Tank,3001234567,Bank,3.2
+184,Trust Point Services,Khanewal,3001234571,Accounting Firm,2.6
+185,Prime Link Traders,Khairpur,3001234544,Computer Shop,3.9
+186,Al Rehman Enterprises,Zhob,3001234527,Bank,0.7
+187,Premier Solutions,Zhob,3001234534,Pest Control,2.1
+188,Sky High Solutions,Sheikhupura,3001234536,Recruitment Agency,3.3
+189,Royal Traders,Karachi,3001234589,Shipping Company,4
+190,Silver Line Enterprises,Bannu,3001234540,Furniture Store,1.3
+191,Elite Choice Solutions,Dunyapur,3001234506,Cleaning Service,2.5
+192,Al Rehman Enterprises,Sanghar,3001234524,Plumbing Service,0.4
+193,Rapid Link Enterprises,Kamoke,3001234562,Dairy Farm,1.1
+194,Smart World Traders,Sukkur,3001234501,Digital Marketing Agency,0.6
+195,Next Level Services,Layyah,3001234523,Shopping Mall,4.5
+196,Smart Choice Store,Khushab,3001234539,Catering Service,4
+197,Diamond Point Store,Chiniot,3001234537,Construction Company,2.9
+198,Next Wave Enterprises,Swabi,3001234518,Sports Shop,3.5
+199,Global Tech Solutions,Kamoke,3001234570,Solar Energy Company,2.7
+200,Bright Future Group,Sukkur,3001234548,Solar Energy Company,4.9
+201,Top Line Enterprises,Sibi,3001234562,Web Development,2.2
+202,Sunshine Enterprises,Mandi Bahauddin,3001234540,Gym,4.2
+203,Golden Crown Traders,Kot Addu,3001234562,Tour Operator,4.8
+204,First Choice Enterprises,Kasur,3001234527,Coaching Center,0
+205,Sunrise Business Hub,Sheikhupura,3001234556,Veterinary Clinic,3.6
+206,Al Noor Traders,Jacobabad,3001234531,Tax Consultancy,0.9
+207,Prime Link Traders,Charsadda,3001234583,Microfinance Institution,2.7
+208,Blue Ocean Traders,Okara,3001234589,Event Management,3
+209,Fast Track Services,Sibi,3001234542,Tax Consultancy,1.6
+210,City Point Marketing,Bhakkar,3001234567,Tour Operator,4.8
+211,Urban Star Traders,Shorkot,3001234516,Hotel,1.7
+212,Infinity Traders,Muzaffargarh,3001234520,Spa,0.4
+213,Trust Worthy Traders,Chiniot,3001234588,Microfinance Institution,0.7
+214,Royal Choice Store,Daska,3001234563,Tailoring Shop,0.8
+215,Future Vision Group,Hyderabad,3001234590,Art Gallery,4.1
+216,Creative Solutions,Bhakkar,3001234528,Laundry Service,4.6
+217,Rapid Solutions,Pishin,3001234537,Guest House,1.1
+218,Fast Track Services,Dunyapur,3001234542,Construction Company,1
+219,Peak Performance Group,Nawabshah,3001234557,Stationery Shop,3
+220,Metro Business Center,Pakpattan,3001234557,Electrical Service,2.7
+221,Diamond Edge Services,Gwadar,3001234582,Bank,3.8
+222,Global Star Marketing,Murree,3001234585,Educational Institute,2.5
+223,Metro Link Traders,Rahim Yar Khan,3001234557,Car Dealership,1.8
+224,Royal Edge Solutions,Karachi,3001234580,Tailoring Shop,3.8
+225,City Star Solutions,Hafizabad,3001234512,Pharmacy,4.7
+226,United Marketing Group,Faisalabad,3001234540,Dental Clinic,2
+227,Modern Edge Marketing,Bhakkar,3001234535,Logistics Company,3.7
+228,Royal Edge Solutions,Khanewal,3001234545,E-commerce Store,0
+229,Elite Vision Enterprises,Depalpur,3001234573,Spa,2.1
+230,City Point Marketing,Hangu,3001234535,Photography Studio,3.7
+231,City Connect Services,Kasur,3001234506,Logistics Company,0
+232,Capital Enterprises,Jacobabad,3001234546,Cleaning Service,1
+233,City Star Solutions,Umerkot,3001234562,Electrical Service,0.5
+234,Alpha Star Traders,Thatta,3001234548,Pizza Shop,1.4
+235,Next Wave Enterprises,Gwadar,3001234563,Poultry Farm,3.3
+236,Prime Star Enterprises,Layyah,3001234569,Shopping Mall,3.6
+237,Capital Enterprises,Bannu,3001234545,Guest House,0.9
+238,Metro Business Center,Abbottabad,3001234501,Fast Food Restaurant,4
+239,Bright Future Group,Thatta,3001234501,Sports Shop,0.7
+240,Modern Edge Marketing,Kamoke,3001234515,Music Academy,4.2
+241,Capital Star Services,Kalat,3001234576,Security Services,1.5
+242,Crown Traders,Chiniot,3001234597,Guest House,3.7
+243,Sky High Solutions,Sargodha,3001234506,Auto Parts Store,2
+244,Digital World Solutions,Gujranwala,3001234523,Cleaning Service,2.2
+245,Trust Point Services,Islamabad,3001234590,Sweet Shop,4.8
+246,Metro Edge Solutions,Daska,3001234510,Cafe,0.3
+247,Metro Business Center,Hyderabad,3001234504,Guest House,2.5
+248,Prime Business Hub,Lakki Marwat,3001234503,Fast Food Restaurant,3.6
+249,Prime Link Traders,Bannu,3001234545,Manpower Agency,2.4
+250,Global Link Traders,Dunyapur,3001234519,Gym,1.2
+251,Blue Ocean Traders,Zhob,3001234529,Shipping Company,3.6
+252,Metro Business Center,Rawalpindi,3001234504,Photography Studio,0.9
+253,Trust Worthy Traders,Sukkur,3001234509,College,0.3
+254,Green Valley Enterprises,Gojra,3001234583,Manpower Agency,3.5
+255,Alpha Star Traders,Mirpur Khas,3001234506,Hardware Store,3.4
+256,Smart Zone Services,Pakpattan,3001234590,Pharmacy,1.7
+257,Trust Worthy Traders,Sukkur,3001234528,University,1
+258,Al Madina Enterprises,Dera Ghazi Khan,3001234523,Sports Shop,3.2
+259,Trust Worthy Traders,Renala Khurd,3001234524,Stationery Shop,0.2
+260,Premier Solutions,Sheikhupura,3001234533,Leather Goods Store,0.3
+261,Modern Business Solutions,Hafizabad,3001234556,Photography Studio,3.4
+262,Bright Star Marketing,Chiniot,3001234547,Law Firm,1.6
+263,Metro Edge Solutions,Kot Addu,3001234564,Hotel,4.2
+264,New Horizon Enterprises,Chaman,3001234532,Computer Shop,2.3
+265,New Heights Business Group,Rahim Yar Khan,3001234578,Medical Clinic,2.8
+266,Royal Traders,Gojra,3001234501,Microfinance Institution,2.7
+267,Rapid Solutions,Karachi,3001234556,Law Firm,3.3
+268,Creative Solutions,Pakpattan,3001234537,Coaching Center,4.5
+269,Sky High Solutions,Burewala,3001234539,Computer Shop,0
+270,Visionary Business Group,Larkana,3001234509,Coaching Center,1.6
+271,Future Vision Group,Kohat,3001234585,Art Gallery,4
+272,Peak Performance Group,Depalpur,3001234514,Travel Agency,2.6
+273,City Point Marketing,Shakargarh,3001234577,Cleaning Service,4.3
+274,Diamond Enterprises,Tando Allahyar,3001234569,Event Management,3.3
+275,Metro Link Traders,Bannu,3001234530,Car Dealership,1.4
+276,Creative Solutions,Murree,3001234576,Music Academy,0.1
+277,Metro Star Services,Chaman,3001234560,Real Estate Agency,2.2
+278,Rapid Solutions,Gujranwala,3001234592,Dry Cleaning,3.4
+279,Urban Edge Solutions,Kamoke,3001234573,Leather Goods Store,1.8
+280,Prime Star Enterprises,Hyderabad,3001234501,Auto Repair Shop,1.3
+281,Digital Edge Solutions,Murree,3001234516,Barber Shop,1.5
+282,Next Wave Enterprises,Daska,3001234565,Bookstore,3.4
+283,Golden Touch Enterprises,Tando Allahyar,3001234558,Printing Press,4
+284,Bright Future Group,Larkana,3001234568,Electrical Service,4.1
+285,Skyline Business Group,Lasbela,3001234561,Event Management,3.4
+286,Al Madina Enterprises,Burewala,3001234577,Advertising Agency,0.9
+287,Golden Gate Enterprises,Hyderabad,3001234565,Web Development,3.1
+288,Metro Edge Solutions,Sahiwal,3001234537,Wholesale Distributor,4.3
+289,Elite Marketing,Bannu,3001234550,Toy Store,3.9
+290,Next Generation Solutions,Pakpattan,3001234533,Dental Clinic,0.2
+291,Future Link Services,Mansehra,3001234533,Hardware Store,0.1
+292,Royal Choice Store,Kot Addu,3001234600,Fitness Center,3.5
+293,Sunrise Business Hub,Kamoke,3001234537,Grocery Store,1.8
+294,Prime Star Enterprises,Sheikhupura,3001234551,Auto Parts Store,3.5
+295,Rapid Solutions,Hafizabad,3001234545,Gym,3.8
+296,New Vision Enterprises,Gujrat,3001234550,Grocery Store,4.2
+297,Smart Future Solutions,Shorkot,3001234536,Music Academy,1.2
+298,Modern Business Solutions,Gojra,3001234541,Consulting Firm,4.5
+299,New Era Traders,Thatta,3001234590,Poultry Farm,4.8
+300,Golden Touch Enterprises,Lakki Marwat,3001234587,Photography Studio,2.7
+301,Royal Traders,Bahawalpur,3001234578,Jewelry Store,2.8
+302,Smart World Traders,Shakargarh,3001234598,Pest Control,1.9
+303,Modern Business Solutions,Shakargarh,3001234526,Optical Store,1.5
+304,Golden Services,Bahawalnagar,3001234542,Shipping Company,1.6
+305,Success Point Solutions,Swabi,3001234541,Clothing Store,4.4
+306,Bright World Traders,Rawalpindi,3001234587,Agriculture Business,3.3
+307,Capital Enterprises,Dera Ismail Khan,3001234537,Poultry Farm,4.8
+308,United Star Traders,Lahore,3001234594,Diagnostic Laboratory,1.5
+309,Al Madina Enterprises,Sibi,3001234591,Wholesale Distributor,1.1
+310,New Vision Enterprises,Abbottabad,3001234528,Dental Clinic,4
+311,Future Link Services,Charsadda,3001234592,College,1.8
+312,Success Point Solutions,Talagang,3001234517,Water Treatment,3.6
+313,Next Wave Enterprises,Jhelum,3001234545,Coaching Center,2.4
+314,Perfect Choice Enterprises,Sialkot,3001234504,Interior Design,3.7
+315,Sky High Solutions,Khanpur,3001234532,Stationery Shop,0.8
+316,Elite Marketing,Islamabad,3001234578,Spa,3.1
+317,Golden Crown Traders,Peshawar,3001234539,Hotel,1.5
+318,Top Choice Enterprises,Khanpur,3001234592,Catering Service,3.3
+319,Royal Vision Group,Pattoki,3001234569,Hospital,2.8
+320,Global Star Marketing,Nawabshah,3001234543,School,4.4
+321,Skyline Business Group,Daska,3001234588,Sports Shop,4.8
+322,New Era Traders,Badin,3001234539,Computer Shop,1.5
+323,First Choice Enterprises,Mandi Bahauddin,3001234534,Shipping Company,0.3
+324,Future Vision Group,Jacobabad,3001234524,Laundry Service,2.1
+325,Diamond Point Store,Charsadda,3001234542,Pharmacy,3.9
+326,Mega Mart,Dadu,3001234590,Graphic Design,1.9
+327,Next Generation Solutions,Pattoki,3001234507,Construction Company,2.7
+328,Sunshine Enterprises,Rawalpindi,3001234544,Gift Shop,3.9
+329,New Vision Enterprises,Shakargarh,3001234523,Insurance Agency,2
+330,Golden Touch Enterprises,Faisalabad,3001234502,Coaching Center,1.1
+331,Royal Edge Solutions,Hyderabad,3001234521,Medical Clinic,3.9
+332,Diamond Edge Services,Rahim Yar Khan,3001234560,Plumbing Service,3.7
+333,City Star Solutions,Abbottabad,3001234572,Microfinance Institution,1.9
+334,Prime Link Traders,Nowshera,3001234592,Music Academy,3.1
+335,Golden Gate Enterprises,Bhakkar,3001234595,Construction Company,3.8
+336,Success Point Solutions,Islamabad,3001234557,Optical Store,1.6
+337,Al Hamza Traders,Toba Tek Singh,3001234532,Property Dealer,4.5
+338,Global Tech Solutions,Dadu,3001234556,Electrical Service,0.2
+339,Skyline Business Group,Kamoke,3001234510,Event Management,3.7
+340,Capital Star Services,Charsadda,3001234592,Restaurant,0.9
+341,Royal Choice Store,Dadu,3001234513,Laundry Service,0
+342,Success Point Solutions,Larkana,3001234551,Electrical Service,1.5
+343,Smart Zone Services,Bannu,3001234545,Solar Energy Company,0.1
+344,Silver Star Traders,Nawabshah,3001234533,Barber Shop,2.8
+345,Fast Track Services,Thatta,3001234513,Veterinary Clinic,2.6
+346,Vision Plus Group,Kasur,3001234560,Toy Store,2
+347,Urban Star Traders,Tando Adam,3001234539,Recruitment Agency,0
+348,Success Point Solutions,Rajanpur,3001234526,Accounting Firm,4.7
+349,Modern Edge Marketing,Kamoke,3001234558,Pet Shop,1.3
+350,Fast Track Services,Nawabshah,3001234599,Courier Service,3.3
+351,Future Vision Group,Lakki Marwat,3001234517,University,4.3
+352,City Connect Services,Jhelum,3001234517,School,2.9
+353,New Horizon Enterprises,Mansehra,3001234552,Photography Studio,3.9
+354,Skyline Business Group,Sargodha,3001234599,Fast Food Restaurant,4.7
+355,United Marketing Group,Wah Cantt,3001234553,Graphic Design,1.8
+356,Golden Services,Kasur,3001234558,Gym,2.7
+357,Diamond Enterprises,Jacobabad,3001234526,Stationery Shop,0
+358,Prime Star Enterprises,Renala Khurd,3001234504,Electronics Store,3
+359,Starline Marketing,Taxila,3001234595,Art Gallery,3.5
+360,Prime Star Enterprises,Layyah,3001234528,Hotel,1.1
+361,Royal Traders,Sargodha,3001234525,Restaurant,3
+362,Success Point Solutions,Pattoki,3001234571,Travel Agency,3.4
+363,Golden Crown Traders,Chakwal,3001234597,Spa,2.1
+364,Diamond Point Store,Quetta,3001234573,Pest Control,0.1
+365,Green Valley Enterprises,Mingora,3001234538,Watch Store,0.3
+366,Rapid Solutions,Pattoki,3001234528,Pet Shop,0.1
+367,First Choice Enterprises,Okara,3001234597,Security Services,1.3
+368,Silver Star Traders,Mansehra,3001234564,Construction Company,1.9
+369,Sunrise Business Hub,Thatta,3001234518,Retail Store,3.6
+370,Future Vision Group,Kot Addu,3001234518,Guest House,2.1
+371,Elite Business Center,Nawabshah,3001234544,Shopping Mall,4
+372,Smart Choice Store,Daska,3001234548,Medical Clinic,4.7
+373,Top Choice Enterprises,Faisalabad,3001234536,Digital Marketing Agency,0.7
+374,Global Vision Group,Swabi,3001234567,Laundry Service,1.4
+375,City Star Solutions,Kohat,3001234564,Dry Cleaning,0.5
+376,Perfect Choice Enterprises,Bannu,3001234517,College,1.1
+377,Urban Star Traders,Muzaffargarh,3001234543,Tour Operator,0.7
+378,Urban Edge Solutions,Sanghar,3001234527,Pest Control,1.7
+379,Global Vision Group,Multan,3001234582,Microfinance Institution,2.7
+380,Silver Line Enterprises,Haripur,3001234537,E-commerce Store,1.5
+381,Universal Business Hub,Burewala,3001234529,Hospital,4.6
+382,Visionary Business Group,Sahiwal,3001234521,Stationery Shop,2.8
+383,Rapid Solutions,Kohat,3001234545,Fast Food Restaurant,3.8
+384,Infinity Business Hub,Toba Tek Singh,3001234538,Poultry Farm,2.2
+385,Bright Star Marketing,Hafizabad,3001234547,Hotel,3.5
+386,Elite Marketing,Depalpur,3001234562,Pest Control,1.2
+387,Prime Link Traders,Burewala,3001234585,Sports Shop,2.6
+388,Golden Touch Enterprises,Chaman,3001234503,College,0
+389,Capital Star Services,Dadu,3001234535,Poultry Farm,4.8
+390,Next Generation Solutions,Multan,3001234561,Catering Service,4
+391,Prime Business Hub,Bhakkar,3001234587,Pet Shop,4.9
+392,Creative Solutions,Depalpur,3001234509,Auto Parts Store,2
+393,Creative Solutions,Gwadar,3001234551,Mobile Shop,3.4
+394,Blue Wave Solutions,Peshawar,3001234582,Hospital,1
+395,Diamond Enterprises,Jhelum,3001234580,Tour Operator,4
+396,Infinity Traders,Murree,3001234549,Dairy Farm,2.5
+397,New Heights Business Group,Talagang,3001234506,Veterinary Clinic,0.2
+398,Global Link Traders,Dadu,3001234538,Electrical Service,4.3
+399,Skyline Business Group,Mandi Bahauddin,3001234575,College,2.9
+400,Top Line Enterprises,Shorkot,3001234546,Bank,4.8
+401,Mega Mart,Bahawalnagar,3001234520,IT Services,0
+402,Infinity Traders,Sheikhupura,3001234539,Microfinance Institution,0.5
+403,Fast Track Services,Hangu,3001234529,Optical Store,1
+404,Trust Worthy Traders,Murree,3001234565,Mobile Shop,2.2
+405,Modern Edge Marketing,Jhelum,3001234507,Bakery,1.5
+406,Golden Crown Traders,Khairpur,3001234590,Sweet Shop,0.6
+407,Capital Star Services,Okara,3001234521,E-commerce Store,4.8
+408,Trust Point Services,Kasur,3001234512,Recruitment Agency,1
+409,Future Link Services,Jacobabad,3001234581,Advertising Agency,4.2
+410,Blue Wave Solutions,Haripur,3001234582,Optical Store,4.7
+411,Al Madina Enterprises,Battagram,3001234535,Pizza Shop,3.8
+412,Elite Marketing,Gujrat,3001234574,Grocery Store,1
+413,Royal Vision Group,Shorkot,3001234516,Dental Clinic,2.4
+414,Digital Edge Solutions,Kot Addu,3001234586,Car Dealership,0.9
+415,Royal Vision Group,Arifwala,3001234505,Coaching Center,0
+416,Bright Path Services,Hafizabad,3001234548,Veterinary Clinic,4.2
+417,City Connect Services,Dunyapur,3001234565,Retail Store,3.2
+418,Prime Edge Services,Arifwala,3001234585,Stationery Shop,4.5
+419,Al Madina Enterprises,Pishin,3001234550,Car Dealership,1.2
+420,Smart Choice Store,Rawalpindi,3001234563,Car Dealership,0.8
+421,Blue Ocean Traders,Depalpur,3001234513,Supermarket,5
+422,Bright Path Services,Ghotki,3001234573,Supermarket,3.6
+423,Global Vision Group,Sheikhupura,3001234506,Catering Service,0.5
+424,Mega Mart,Dadu,3001234567,Water Treatment,2.3
+425,Peak Performance Group,Attock,3001234503,Cleaning Service,2.1
+426,Rapid Solutions,Loralai,3001234540,Mobile Shop,4.2
+427,Al Madina Enterprises,Sialkot,3001234572,Sweet Shop,3.8
+428,Rapid Link Enterprises,Gwadar,3001234556,University,1.6
+429,Elite Marketing,Tando Allahyar,3001234515,Mobile Shop,0
+430,Diamond Enterprises,Lahore,3001234536,Software House,4
+431,Al Madina Enterprises,Hafizabad,3001234535,Spa,4.6
+432,Top Line Enterprises,Jhelum,3001234552,Real Estate Agency,3.7
+433,Top Line Enterprises,Sukkur,3001234593,Optical Store,1.3
+434,Future Link Services,Gujrat,3001234600,Photography Studio,3.4
+435,Perfect Vision Services,Khanpur,3001234506,Bank,1.5
+436,Skyline Business Group,Mandi Bahauddin,3001234564,Bakery,1.6
+437,Metro Star Services,Jacobabad,3001234521,Microfinance Institution,2.9
+438,Urban Edge Solutions,Talagang,3001234533,Grocery Store,2.7
+439,Trust Worthy Traders,Shorkot,3001234590,Fitness Center,5
+440,Top Line Enterprises,Sargodha,3001234531,Mobile Accessories Store,0.4
+441,Top Choice Enterprises,Kamoke,3001234524,Tour Operator,0.3
+442,Urban Edge Solutions,Chakwal,3001234522,Electrical Service,1.2
+443,Infinity Business Hub,Mingora,3001234588,Poultry Farm,2.8
+444,Premier Solutions,Charsadda,3001234515,Music Academy,2.1
+445,Capital Link Enterprises,Layyah,3001234523,Shoe Store,4.1
+446,Visionary Business Group,Arifwala,3001234584,Real Estate Agency,1.4
+447,Digital World Solutions,Wah Cantt,3001234570,Dairy Farm,2.1
+448,Diamond Point Store,Chakwal,3001234516,Sweet Shop,3.4
+449,Royal Choice Store,Kot Addu,3001234594,College,2.3
+450,Infinity Traders,Bannu,3001234524,Event Management,3.2
+451,Bright Future Group,Swabi,3001234518,Event Management,0.2
+452,Trust Worthy Traders,Toba Tek Singh,3001234538,University,2.2
+453,Global Tech Solutions,Zhob,3001234590,Solar Energy Company,2.5
+454,Success Point Solutions,Pishin,3001234515,Graphic Design,4.7
+455,Smart Future Solutions,Kharian,3001234510,Accounting Firm,3.5
+456,Mega Mart,Bahawalnagar,3001234537,Gym,4.6
+457,City Connect Services,Shakargarh,3001234552,Bakery,0.7
+458,Al Noor Traders,Hafizabad,3001234541,Clothing Store,4.6
+459,Urban Star Traders,Kharian,3001234596,Sweet Shop,2.2
+460,Royal Choice Store,Pishin,3001234511,Wholesale Distributor,2
+461,Diamond Point Store,Kalat,3001234542,Manpower Agency,2.6
+462,United Star Traders,Quetta,3001234554,Educational Institute,3.4
+463,Silver Line Enterprises,Arifwala,3001234573,Microfinance Institution,2.6
+464,United Marketing Group,Shakargarh,3001234530,Web Development,1.1
+465,Smart Future Solutions,Attock,3001234551,Web Development,3.2
+466,Premier Solutions,Jacobabad,3001234599,Microfinance Institution,4.8
+467,Royal Traders,Gujrat,3001234572,Dental Clinic,2.8
+468,Royal Edge Solutions,Muzaffargarh,3001234599,Hospital,3.8
+469,City Connect Services,Ghotki,3001234568,Fast Food Restaurant,0.4
+470,Global Tech Solutions,Mianwali,3001234543,Tailoring Shop,3.2
+471,Universal Business Hub,Daska,3001234539,Stationery Shop,4
+472,Sky High Solutions,Jacobabad,3001234599,Sports Shop,1.8
+473,Elite Marketing,Khanewal,3001234539,Coaching Center,2.2
+474,Blue Wave Solutions,Sahiwal,3001234518,Insurance Agency,1.6
+475,Next Generation Solutions,Toba Tek Singh,3001234534,Computer Shop,4.4
+476,Fast Track Services,Dera Ismail Khan,3001234551,Recruitment Agency,5
+477,Starline Marketing,Quetta,3001234584,Gym,2.9
+478,Prime Link Traders,Vehari,3001234593,Auto Repair Shop,1.6
+479,City Lights Marketing,Lakki Marwat,3001234595,IT Services,0.5
+480,Top Line Enterprises,Mardan,3001234518,Water Treatment,0.3
+481,Premier Solutions,Mandi Bahauddin,3001234505,Fast Food Restaurant,4.3
+482,City Lights Marketing,Shakargarh,3001234503,Shipping Company,0.4
+483,Smart Zone Services,Pakpattan,3001234528,Clothing Store,2.6
+484,Diamond Edge Services,Rawalpindi,3001234545,Auto Repair Shop,0.5
+485,Future Link Services,Swabi,3001234574,Recruitment Agency,3.7
+486,Creative Solutions,Khanpur,3001234556,Architecture Firm,1.5
+487,Digital World Solutions,Tank,3001234590,Spa,5
+488,Elite Marketing,Pishin,3001234550,Construction Company,0.6
+489,United Star Traders,Jhang,3001234561,Solar Energy Company,3.7
+490,Classic Traders,Kasur,3001234547,Clothing Store,0.6
+491,New Era Traders,Khairpur,3001234529,Music Academy,2.7
+492,Digital World Solutions,Battagram,3001234584,Accounting Firm,3.2
+493,Sunshine Enterprises,Taunsa,3001234557,Laundry Service,2.1
+494,Prime Star Enterprises,Loralai,3001234539,Accounting Firm,3.7
+495,Next Generation Solutions,Mardan,3001234516,Sweet Shop,0.4
+496,Al Rehman Enterprises,Rahim Yar Khan,3001234580,Pet Shop,0.1
+497,Blue Ocean Traders,Jampur,3001234567,Hospital,0.8
+498,Royal Traders,Chiniot,3001234588,Wholesale Distributor,3.5
+499,City Lights Marketing,Kalat,3001234590,Wholesale Distributor,3.4
