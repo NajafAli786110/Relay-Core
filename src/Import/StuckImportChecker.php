@@ -22,6 +22,11 @@ class StuckImportChecker {
 	const STUCK_AFTER = 4 * MINUTE_IN_SECONDS;
 
 	/**
+	 * If the import's updated_at is soo older than a day, it means it's abondonded not STUCKED.
+	 */
+	const GIVE_UP_AFTER = DAY_IN_SECONDS;
+
+	/**
 	 * Reads and updates import state.
 	 *
 	 * @var ImportState
@@ -70,6 +75,18 @@ class StuckImportChecker {
 			return;
 		}
 
+		if ( ! isset( $state['updated_at'] ) || time() - self::GIVE_UP_AFTER < $state['updated_at'] ) {
+			$message = 'Abandoned: no activity for over a day';
+
+			$changes = array(
+				'error'  => $message,
+				'status' => 'failed',
+			);
+
+			$this->import_state->update( $import_id, $changes );
+			return;
+		}
+
 		if ( self::STUCK_AFTER > time() - $state['updated_at'] ) {
 			return;
 		}
@@ -100,7 +117,7 @@ class StuckImportChecker {
 		}
 	}
 
-    /**
+	/**
 	 * Run check_status on all the imports states we have, this is use for recurring but also can use for other, just to track all in good place.
 	 *
 	 * @return void
