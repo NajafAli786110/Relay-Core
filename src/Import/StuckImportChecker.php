@@ -75,7 +75,7 @@ class StuckImportChecker {
 			return;
 		}
 
-		if ( ! isset( $state['updated_at'] ) || time() - self::GIVE_UP_AFTER < $state['updated_at'] ) {
+		if ( ! isset( $state['updated_at'] ) || self::GIVE_UP_AFTER < time() - $state['updated_at'] ) {
 			$message = 'Abandoned: no activity for over a day';
 
 			$changes = array(
@@ -118,7 +118,7 @@ class StuckImportChecker {
 	}
 
 	/**
-	 * Run check_status on all the imports states we have, this is use for recurring but also can use for other, just to track all in good place.
+	 * An import with no state update for this long is abandoned and marked failed instead of retried.
 	 *
 	 * @return void
 	 */
