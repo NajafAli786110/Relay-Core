@@ -92,6 +92,10 @@ class ImportAjax {
 			$response['errors'] = $this->import_log->get_for_import( $import_id );
 		}
 
+		if ( isset( $state['error'] ) && 'failed' === $state['status'] ) {
+			$response['error'] = $state['error'];
+		}
+
 		wp_send_json_success(
 			$response
 		);
