@@ -29,10 +29,22 @@ async function checkStatus() {
     if (result.data.status === "running") {
         const { offset, total } = result.data;
         const percent = total > 0 ? Math.round(offset / total * 100) : 0;
-        progressText.textContent = `${offset} / ${total} rows (${percent}%)`;
-        setTimeout( checkStatus, 3000 );
-    } else {
+
+        if ( offset == 0 ) {
+            progressText.textContent = `Queued, waiting to start…`
+        } else {
+            progressText.textContent = `${offset} / ${total} rows (${percent}%)`;
+        }
+        setTimeout(checkStatus, 3000);
+    } else if (result.data.status === "failed") {
+        const error = result.data.error ? result.data.error : 'Error but it is not showing!';
+        progressText.textContent = `${error}`;
+    } else if (result.data.status === "pending") {
+        progressText.textContent = `Queued, waiting to start…`;
+    } else if (result.data.status === "done") {
         progressText.textContent = `Congratulations Imported Successfully! ${result.data.offset} rows done. Created: ${result.data.created}, Updated: ${result.data.updated}, Failed: ${result.data.failed}`;
+    } else {
+        progressText.textContent = `Something else!`;
     }
 
     if (result.data.status === "done" && Array.isArray(result.data.errors)) {
