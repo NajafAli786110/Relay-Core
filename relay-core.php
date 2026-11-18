@@ -32,6 +32,7 @@ use EngineWP\RelayCore\Rest\ImportsController;
 use EngineWP\RelayCore\Import\StuckImportChecker;
 
 define( 'RELAY_CORE_FILE', __FILE__ );
+const RELAY_CORE_DB_VERSION = '0.1.0';
 
 $register_post_type = new RegisterPostType();
 
@@ -46,6 +47,16 @@ add_action( 'rest_api_init', array( $import_controller, 'register_routes' ) );
 add_action( 'wp_ajax_relay_core_import_status', array( $import_ajax, 'handle_status' ) );
 
 register_activation_hook( RELAY_CORE_FILE, array( $import_log, 'create_table' ) );
+
+add_action(
+	'plugins_loaded',
+	function () use ( $import_log ) {
+		if ( RELAY_CORE_DB_VERSION !== get_option( 'relay_core_db_version' ) ) {
+			$import_log->create_table();
+			update_option( 'relay_core_db_version', RELAY_CORE_DB_VERSION );
+		}
+	}
+);
 
 $background_import    = new BackgroundImport( $batch_processor );
 $stuck_import_checker = new StuckImportChecker( $import_state, $background_import );
