@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Relay Core
  * Description: CSV importer for Listings CPT.
- * Version: 0.1.0
+ * Version: 0.2.0
  * Author: EngineWP
  * License: GPL-2.0-or-later
  * Text Domain: relay-core

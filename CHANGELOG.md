@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.2.0] - 2026-11-23
+
+### Added
+
+- Imports run in the background with Action Scheduler, 500 rows per job. You can close the page and the import keeps going.
+- Imports that stop moving are restarted automatically within a few minutes, and marked as failed after 3 restarts.
+- A new **Listings → History** page lists every import with its status, date, total rows and failed rows.
+- Failed rows of an import open in a popup, 20 per page.
+- REST API routes for imports and their failed rows, available to administrators.
+
+### Changed
+
+- The import screens were redesigned: a three-step indicator, a file picker card, labelled mapping fields and a progress bar.
+- The screens follow the user's WordPress admin colour scheme.
+- The log table is now updated automatically after a plugin update. Reactivating the plugin is no longer needed.
+
 ## [0.1.0] - 2026-10-12
 
 First release.
