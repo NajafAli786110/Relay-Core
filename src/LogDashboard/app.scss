@@ -1,6 +1,168 @@
-$brand: #2271b1;
+// Styles for the Import History dashboard (React).
 
-.relay-test {
-    color: $brand;
-    font-weight: 700;
+@use "../styles/tokens" as *;
+@use "../styles/components";
+
+// Table.
+.rc-table-wrap {
+	overflow-x: auto;
+}
+
+.rc-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 13px;
+
+	th {
+		padding: $rc-space-3 $rc-space-5;
+		border-bottom: 1px solid $rc-border;
+		background: $rc-subtle;
+		color: $rc-muted;
+		font-size: 11px;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-align: left;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	td {
+		padding: $rc-space-3 $rc-space-5;
+		border-bottom: 1px solid $rc-border;
+		vertical-align: middle;
+	}
+
+	tbody tr:last-child td {
+		border-bottom: 0;
+	}
+
+	tbody tr {
+		transition: background-color 0.15s ease;
+
+		&:hover {
+			background: #fafafa;
+		}
+
+		&.is-selected {
+			background: $rc-info-bg;
+			box-shadow: inset 3px 0 0 $rc-primary;
+		}
+	}
+
+	.rc-num {
+		font-variant-numeric: tabular-nums;
+		text-align: right;
+	}
+
+	.rc-cell-action {
+		text-align: right;
+		white-space: nowrap;
+	}
+}
+
+// Long import ids stay on one line and show in full on hover.
+.rc-id {
+	display: inline-block;
+	max-width: 160px;
+	overflow: hidden;
+	padding: 2px 6px;
+	border-radius: 4px;
+	background: $rc-subtle;
+	font-family: $rc-mono;
+	font-size: 12px;
+	text-overflow: ellipsis;
+	vertical-align: middle;
+	white-space: nowrap;
+}
+
+.rc-field-name {
+	font-family: $rc-mono;
+	font-size: 12px;
+}
+
+// Failed rows popup. Sits above the admin bar (z-index 99999).
+.rc-modal-backdrop {
+	position: fixed;
+	z-index: 100000;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: $rc-space-5;
+	background: rgba(30, 30, 30, 0.45);
+	animation: rc-fade-in 0.15s ease-out;
+}
+
+.rc-modal {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	max-width: 760px;
+	max-height: min(80vh, 720px);
+	margin: 0;
+	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+	animation: rc-slide-in 0.2s ease-out;
+
+	// Header and pagination stay put; only the rows scroll.
+	.rc-table-wrap {
+		flex: 1 1 auto;
+		min-height: 0;
+		overflow: auto;
+	}
+
+	.rc-table th {
+		position: sticky;
+		z-index: 1;
+		top: 0;
+	}
+}
+
+@keyframes rc-fade-in {
+	from {
+		opacity: 0;
+	}
+}
+
+.rc-pagination {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: $rc-space-3;
+	padding: $rc-space-3 $rc-space-5;
+	border-top: 1px solid $rc-border;
+	background: $rc-subtle;
+}
+
+.rc-pagination__info {
+	margin: 0;
+	color: $rc-muted;
+	font-size: 13px;
+
+	strong {
+		color: $rc-text;
+	}
+}
+
+@keyframes rc-slide-in {
+	from {
+		opacity: 0;
+		transform: translateY(6px);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.rc-modal,
+	.rc-modal-backdrop {
+		animation: none;
+	}
+}
+
+@media (max-width: 782px) {
+	.rc-table th,
+	.rc-table td,
+	.rc-card__header,
+	.rc-pagination {
+		padding-right: $rc-space-3;
+		padding-left: $rc-space-3;
+	}
 }

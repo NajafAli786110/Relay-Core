@@ -59,8 +59,11 @@ class LogsPage {
 	 */
 	public function render_logs_page() {
 		?>
-		<div class="wrap">
-			<h1>Relay Core Logs Dashboard</h1>
+		<div class="wrap rc-app">
+			<div class="rc-page-header">
+				<h1>Import History</h1>
+				<p class="rc-page-header__subtitle">Every import with its status, and the rows that failed.</p>
+			</div>
 			<div id="relay-user-history">
 				<?php
 				$check_path = $this->asset_path();

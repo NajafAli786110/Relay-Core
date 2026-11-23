@@ -26,43 +26,59 @@ const ImportsTable = () => {
     }, []);
 
     return (
-        <div>
+        <div className="rc-dashboard">
             {loading ? (
-                <p>Loading...</p>
+                <div className="rc-card rc-state">
+                    <span className="rc-spinner" aria-hidden="true"></span>
+                    <p className="rc-state__text">Loading imports…</p>
+                </div>
             ) : error ? (
-                <p>{error}</p>
+                <div className="rc-notice rc-notice--error" role="alert">{error}</div>
             ) : userHistory.length > 0 ? (
-                <div>
-                    <table style={{ border: '1px solid black', marginBottom: '10px', width: '100%' }}>
-                        <thead>
-                            <tr>
-                                <th style={{ backgroundColor: 'black', color: 'white', padding: '10px' }}>Import ID</th>
-                                <th style={{ backgroundColor: 'black', color: 'white', padding: '10px' }}>Status</th>
-                                <th style={{ backgroundColor: 'black', color: 'white', padding: '10px' }}>Created At</th>
-                                <th style={{ backgroundColor: 'black', color: 'white', padding: '10px' }}>Total</th>
-                                <th style={{ backgroundColor: 'black', color: 'white', padding: '10px' }}>Failed</th>
-                                <th style={{ backgroundColor: 'black', color: 'white', padding: '10px' }}>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {userHistory.map((importItem) => (
-                                <ImportRow key={importItem.id} importItem={importItem} setSelectedImportId={setSelectedImportId} />
-                            ))}
-                        </tbody>
-                    </table>
+                <>
+                    <div className="rc-card rc-card--flush">
+                        <div className="rc-card__header">
+                            <h2 className="rc-card__title">
+                                Recent imports
+                                <span className="rc-count">{userHistory.length}</span>
+                            </h2>
+                        </div>
+                        <div className="rc-table-wrap">
+                            <table className="rc-table">
+                                <thead>
+                                    <tr>
+                                        <th>Import ID</th>
+                                        <th>Status</th>
+                                        <th>Created</th>
+                                        <th className="rc-num">Total</th>
+                                        <th className="rc-num">Failed</th>
+                                        <th className="rc-cell-action"><span className="screen-reader-text">Action</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {userHistory.map((importItem) => (
+                                        <ImportRow
+                                            key={importItem.id}
+                                            importItem={importItem}
+                                            isSelected={importItem.id === selectedImportId}
+                                            setSelectedImportId={setSelectedImportId}
+                                        />
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     {
                         selectedImportId && (
-                            <>
-                                <ImportLogs importId={selectedImportId} />
-                                <button type='button' onClick={() => setSelectedImportId(null)} style={{ marginBottom: '10px', padding: '10px', backgroundColor: 'black', color: 'white', border: 'none', cursor: 'pointer' }}>
-                                    X
-                                </button>
-                            </>
+                            <ImportLogs importId={selectedImportId} onClose={() => setSelectedImportId(null)} />
                         )
                     }
-                </div>
+                </>
             ) : (
-                <p>No user history available.</p>
+                <div className="rc-card rc-state">
+                    <p className="rc-state__title">No imports yet</p>
+                    <p className="rc-state__text">Imports you run from Bulk Import will show up here.</p>
+                </div>
             )}
         </div>
     )
@@ -70,4 +86,4 @@ const ImportsTable = () => {
 
 export default ImportsTable;
 
-createRoot(document.getElementById('relay-user-history')).render(<ImportsTable />); 
+createRoot(document.getElementById('relay-user-history')).render(<ImportsTable />);
