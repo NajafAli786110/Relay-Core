@@ -1,3 +1,5 @@
+import './app.scss';
+
 import { createRoot, useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import ImportRow from './ImportRow';

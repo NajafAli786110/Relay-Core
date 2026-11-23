@@ -49,6 +49,7 @@ class LogsPage {
 
 		$asset = require $check_path;
 		wp_enqueue_script( 'relay-user-history', plugins_url( '/build/app.js', RELAY_CORE_FILE ), $asset['dependencies'], $asset['version'], true );
+		wp_enqueue_style( 'relay-user-history', plugins_url( '/build/app.css', RELAY_CORE_FILE ), array(), $asset['version'], 'all' );
 	}
 
 	/**
