@@ -67,6 +67,7 @@ $upload_page = new UploadPage( $background_import );
 add_action( 'admin_menu', array( $upload_page, 'register_menu' ) );
 add_action( 'admin_menu', array( $logs_page, 'register_page_menu' ) );
 add_action( 'admin_enqueue_scripts', array( $logs_page, 'enqueue' ) );
+add_action( 'admin_enqueue_scripts', array( $upload_page, 'enqueue_styles' ) );
 
 add_action( 'relay_core_run_batch', array( $background_import, 'run_batch' ) );
 add_action( 'relay_core_check_stuck', array( $stuck_import_checker, 'run' ) );

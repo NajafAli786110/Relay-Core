@@ -1,5 +1,7 @@
 async function checkStatus() {
     const progressText = document.getElementById('relay-core-progress');
+    const progressBar = document.getElementById('relay-core-progress-bar');
+    const progressCard = document.getElementById('relay-core-progress-card');
     let result;
 
     const body = new URLSearchParams({
@@ -29,6 +31,7 @@ async function checkStatus() {
     if (result.data.status === "running") {
         const { offset, total } = result.data;
         const percent = total > 0 ? Math.round(offset / total * 100) : 0;
+        progressBar.style.width = `${percent}%`;
 
         if ( offset == 0 ) {
             progressText.textContent = `Queued, waiting to start…`
@@ -39,10 +42,13 @@ async function checkStatus() {
     } else if (result.data.status === "failed") {
         const error = result.data.error ? result.data.error : 'Error but it is not showing!';
         progressText.textContent = `${error}`;
+        progressCard.classList.add('is-failed');
     } else if (result.data.status === "pending") {
         progressText.textContent = `Queued, waiting to start…`;
     } else if (result.data.status === "done") {
-        progressText.textContent = `Congratulations Imported Successfully! ${result.data.offset} rows done. Created: ${result.data.created}, Updated: ${result.data.updated}, Failed: ${result.data.failed}`;
+        progressText.textContent = `Import complete. ${result.data.offset} rows processed. Created: ${result.data.created}, Updated: ${result.data.updated}, Failed: ${result.data.failed}`;
+        progressBar.style.width = '100%';
+        progressCard.classList.add('is-done');
     } else {
         progressText.textContent = `Something else!`;
     }
@@ -51,6 +57,7 @@ async function checkStatus() {
         const errorList = result.data.errors;
 
         const ul = document.createElement("ul");
+        ul.className = "rc-error-list";
 
         if (errorList.length !== 0) {
             errorList.forEach((item) => {

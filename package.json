@@ -6,8 +6,8 @@
   "license": "GPL-2.0-or-later",
   "scripts": {
     "wp-env": "wp-env",
-    "build": "wp-scripts build src/LogDashboard/app.js",
-    "start": "wp-scripts start src/LogDashboard/app.js"
+    "build": "wp-scripts build src/LogDashboard/app.js src/Upload/upload.js",
+    "start": "wp-scripts start src/LogDashboard/app.js src/Upload/upload.js"
   },
   "devDependencies": {
     "@wordpress/env": "^10.0.0",

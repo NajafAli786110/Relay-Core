@@ -1,0 +1,242 @@
+// Styles for the Bulk Import screens (upload, mapping, progress), rendered by PHP.
+
+@use "../styles/tokens" as *;
+@use "../styles/components";
+
+// Step indicator.
+.rc-steps {
+	display: flex;
+	gap: $rc-space-2;
+	margin: 0 0 $rc-space-5;
+	padding: 0;
+	list-style: none;
+	counter-reset: rc-step;
+}
+
+.rc-steps__item {
+	display: flex;
+	flex: 1;
+	align-items: center;
+	gap: $rc-space-2;
+	margin: 0;
+	padding-top: $rc-space-3;
+	border-top: 3px solid $rc-border;
+	color: $rc-muted;
+	font-size: 13px;
+	font-weight: 500;
+	counter-increment: rc-step;
+
+	&::before {
+		content: counter(rc-step);
+		display: inline-grid;
+		flex: none;
+		place-items: center;
+		width: 24px;
+		height: 24px;
+		border: 1px solid $rc-border;
+		border-radius: 50%;
+		background: $rc-surface;
+		font-size: 12px;
+		font-weight: 600;
+	}
+
+	&.is-done {
+		border-top-color: $rc-primary;
+		color: $rc-text;
+
+		&::before {
+			content: "✓";
+			border-color: $rc-primary;
+			background: $rc-primary;
+			color: #fff;
+		}
+	}
+
+	&.is-current {
+		border-top-color: $rc-primary;
+		color: $rc-text;
+		font-weight: 600;
+
+		&::before {
+			border-color: $rc-primary;
+			color: $rc-primary;
+		}
+	}
+}
+
+.rc-form-card {
+	max-width: 640px;
+}
+
+// File picker.
+.rc-dropzone {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: $rc-space-2;
+	padding: $rc-space-6 $rc-space-5;
+	border: 2px dashed $rc-border;
+	border-radius: $rc-radius;
+	background: $rc-subtle;
+	text-align: center;
+	cursor: pointer;
+	transition: border-color 0.15s ease, background-color 0.15s ease;
+
+	&:hover,
+	&:focus-within {
+		border-color: $rc-primary;
+		background: $rc-info-bg;
+	}
+}
+
+.rc-dropzone__icon.dashicons {
+	width: 40px;
+	height: 40px;
+	color: $rc-primary;
+	font-size: 40px;
+}
+
+.rc-dropzone__title {
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.rc-dropzone__hint {
+	color: $rc-muted;
+	font-size: 13px;
+}
+
+.rc-dropzone__input {
+	margin-top: $rc-space-2;
+	font-size: 13px;
+
+	&::file-selector-button {
+		margin-right: $rc-space-3;
+		padding: 6px 14px;
+		border: 1px solid $rc-primary;
+		border-radius: $rc-radius-sm;
+		background: $rc-surface;
+		color: $rc-primary;
+		font-weight: 500;
+		cursor: pointer;
+	}
+
+	&:focus-visible {
+		@include rc-focus-ring;
+	}
+}
+
+// Mapping fields.
+.rc-field {
+	margin-bottom: $rc-space-5;
+
+	select {
+		width: 100%;
+		max-width: none;
+		min-height: 40px;
+		border-color: $rc-border;
+		border-radius: $rc-radius-sm;
+	}
+}
+
+.rc-field__label {
+	display: block;
+	margin-bottom: $rc-space-2;
+	font-weight: 600;
+}
+
+.rc-field__hint {
+	margin: $rc-space-2 0 0;
+	color: $rc-muted;
+	font-size: 12px;
+}
+
+.rc-required {
+	color: $rc-error;
+}
+
+.rc-actions {
+	display: flex;
+	align-items: center;
+	gap: $rc-space-3;
+	margin-top: $rc-space-5;
+	padding-top: $rc-space-4;
+	border-top: 1px solid $rc-border;
+}
+
+// Import progress.
+.rc-progress {
+	height: 10px;
+	margin: $rc-space-4 0 $rc-space-3;
+	overflow: hidden;
+	border-radius: 999px;
+	background: $rc-subtle;
+}
+
+.rc-progress__bar {
+	display: block;
+	width: 0;
+	height: 100%;
+	border-radius: inherit;
+	background: $rc-primary;
+	transition: width 0.4s ease;
+}
+
+.rc-progress-card {
+	&.is-done .rc-progress__bar {
+		background: $rc-success;
+	}
+
+	&.is-failed .rc-progress__bar {
+		width: 100%;
+		background: $rc-error;
+	}
+
+	&.is-done #relay-core-progress {
+		color: $rc-success;
+		font-weight: 600;
+	}
+
+	&.is-failed #relay-core-progress {
+		color: $rc-error;
+		font-weight: 600;
+	}
+}
+
+#relay-core-progress {
+	margin: 0;
+	font-size: 14px;
+}
+
+.rc-error-list {
+	max-height: 280px;
+	margin: $rc-space-4 0 0;
+	padding: $rc-space-3 $rc-space-4;
+	overflow-y: auto;
+	border: 1px solid $rc-border;
+	border-radius: $rc-radius-sm;
+	background: $rc-error-bg;
+	list-style: none;
+
+	li {
+		margin: 0;
+		padding: 6px 0;
+		border-bottom: 1px solid rgba(179, 45, 46, 0.15);
+		color: $rc-error;
+		font-size: 13px;
+
+		&:last-child {
+			border-bottom: 0;
+		}
+	}
+}
+
+@media (max-width: 600px) {
+	.rc-steps__item {
+		font-size: 0;
+
+		&::before {
+			font-size: 12px;
+		}
+	}
+}

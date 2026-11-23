@@ -1,0 +1,253 @@
+// Building blocks used on both the upload screens and the history dashboard.
+
+@use "tokens" as *;
+
+.rc-app {
+	color: $rc-text;
+
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+}
+
+// Page header.
+.rc-page-header {
+	margin: $rc-space-4 0 $rc-space-5;
+
+	h1 {
+		margin: 0;
+		padding: 0;
+		font-size: 23px;
+		font-weight: 600;
+		line-height: 1.3;
+	}
+}
+
+.rc-page-header__subtitle {
+	margin: $rc-space-1 0 0;
+	color: $rc-muted;
+	font-size: 14px;
+}
+
+// Cards.
+.rc-card {
+	margin-bottom: $rc-space-5;
+	padding: $rc-space-5;
+	border: 1px solid $rc-border;
+	border-radius: $rc-radius;
+	background: $rc-surface;
+	box-shadow: $rc-shadow;
+}
+
+.rc-card--flush {
+	padding: 0;
+	overflow: hidden;
+}
+
+.rc-card__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: $rc-space-3;
+	padding: $rc-space-4 $rc-space-5;
+	border-bottom: 1px solid $rc-border;
+}
+
+.rc-card__title {
+	display: flex;
+	align-items: center;
+	gap: $rc-space-2;
+	margin: 0;
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.rc-card__subtitle {
+	margin: 2px 0 0;
+	color: $rc-muted;
+	font-size: 13px;
+}
+
+.rc-count {
+	padding: 1px 8px;
+	border-radius: 999px;
+	background: $rc-subtle;
+	color: $rc-muted;
+	font-size: 12px;
+	font-weight: 500;
+}
+
+// Buttons. WordPress .button classes keep their behaviour; this only modernises the shape.
+.rc-app .button {
+	display: inline-flex;
+	align-items: center;
+	gap: $rc-space-1;
+	border-radius: $rc-radius-sm;
+	line-height: 2.15;
+
+	svg {
+		width: 16px;
+		height: 16px;
+	}
+}
+
+.rc-app .button-hero {
+	padding: 0 $rc-space-5;
+	font-size: 14px;
+	line-height: 2.6;
+}
+
+.rc-icon-button {
+	display: inline-grid;
+	place-items: center;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	border: 0;
+	border-radius: $rc-radius-sm;
+	background: transparent;
+	color: $rc-muted;
+	cursor: pointer;
+
+	svg {
+		width: 18px;
+		height: 18px;
+	}
+
+	&:hover {
+		background: $rc-subtle;
+		color: $rc-text;
+	}
+
+	&:focus-visible {
+		@include rc-focus-ring;
+	}
+}
+
+// Status badges.
+.rc-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 2px 10px;
+	border-radius: 999px;
+	background: $rc-subtle;
+	color: $rc-muted;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 20px;
+	white-space: nowrap;
+
+	&::before {
+		content: "";
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: currentColor;
+	}
+}
+
+.rc-badge--done {
+	background: $rc-success-bg;
+	color: $rc-success;
+}
+
+.rc-badge--running {
+	background: $rc-info-bg;
+	color: $rc-info;
+
+	&::before {
+		animation: rc-pulse 1.2s ease-in-out infinite;
+	}
+}
+
+.rc-badge--pending {
+	background: $rc-warning-bg;
+	color: $rc-warning;
+}
+
+.rc-badge--failed {
+	background: $rc-error-bg;
+	color: $rc-error;
+}
+
+// Inline notices inside our own screens.
+.rc-notice {
+	margin: 0 0 $rc-space-5;
+	padding: $rc-space-3 $rc-space-4;
+	border: 1px solid $rc-border;
+	border-left-width: 4px;
+	border-radius: $rc-radius-sm;
+	background: $rc-surface;
+}
+
+.rc-notice--error {
+	border-color: $rc-error;
+	background: $rc-error-bg;
+	color: $rc-error;
+}
+
+// Loading and empty states.
+.rc-state {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: $rc-space-3;
+	padding: $rc-space-6 $rc-space-5;
+	color: $rc-muted;
+	text-align: center;
+}
+
+.rc-state__title {
+	margin: 0;
+	color: $rc-text;
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.rc-state__text {
+	margin: 0;
+}
+
+.rc-spinner {
+	width: 22px;
+	height: 22px;
+	border: 2px solid $rc-border;
+	border-top-color: $rc-primary;
+	border-radius: 50%;
+	animation: rc-spin 0.8s linear infinite;
+}
+
+.rc-muted {
+	color: $rc-muted;
+}
+
+.rc-text-error {
+	color: $rc-error;
+	font-weight: 600;
+}
+
+.rc-text-success {
+	color: $rc-success;
+}
+
+@keyframes rc-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes rc-pulse {
+	50% {
+		opacity: 0.35;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.rc-spinner,
+	.rc-badge--running::before {
+		animation-duration: 3s;
+	}
+}

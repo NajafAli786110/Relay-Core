@@ -40,10 +40,73 @@ class UploadPage {
 	}
 
 	/**
+	 * Screen name returned by add_submenu_page(), used to load the stylesheet only on this page.
+	 *
+	 * @var string
+	 */
+	private $hook = '';
+
+	/**
 	 * Registers the admin menu page.
 	 */
 	public function register_menu() {
-		add_submenu_page( 'edit.php?post_type=listing', 'Bulk Data Import | Relay', 'Bulk Import', 'manage_options', 'relay-import', array( $this, 'render_page' ) );
+		$this->hook = add_submenu_page( 'edit.php?post_type=listing', 'Bulk Data Import | Relay', 'Bulk Import', 'manage_options', 'relay-import', array( $this, 'render_page' ) );
+	}
+
+	/**
+	 * Loads the Bulk Import stylesheet on this page only.
+	 *
+	 * @param string $hook_suffix Screen name of the current admin page.
+	 * @return void
+	 */
+	public function enqueue_styles( $hook_suffix ) {
+		if ( $hook_suffix !== $this->hook ) {
+			return;
+		}
+
+		$asset_path = plugin_dir_path( RELAY_CORE_FILE ) . 'build/upload.asset.php';
+
+		if ( ! file_exists( $asset_path ) ) {
+			return;
+		}
+
+		$asset = require $asset_path;
+		wp_enqueue_style( 'relay-core-upload', plugins_url( '/build/upload.css', RELAY_CORE_FILE ), array(), $asset['version'] );
+	}
+
+	/**
+	 * Prints the page title, subtitle and the three step indicator.
+	 *
+	 * @param int    $current_step Step being shown: 1 upload, 2 map, 3 import.
+	 * @param string $title        Page heading.
+	 * @param string $subtitle     Line under the heading.
+	 * @return void
+	 */
+	private function page_header( int $current_step, string $title, string $subtitle ) {
+		$steps = array( 'Upload file', 'Map columns', 'Import' );
+		?>
+		<div class="rc-page-header">
+			<h1><?php echo esc_html( $title ); ?></h1>
+			<p class="rc-page-header__subtitle"><?php echo esc_html( $subtitle ); ?></p>
+		</div>
+		<ol class="rc-steps">
+			<?php
+			foreach ( $steps as $index => $label ) :
+				$step_number = $index + 1;
+				$step_class  = '';
+
+				if ( $step_number < $current_step ) {
+					$step_class = 'is-done';
+				} elseif ( $step_number === $current_step ) {
+					$step_class = 'is-current';
+				}
+				?>
+				<li class="rc-steps__item <?php echo esc_attr( $step_class ); ?>" <?php echo $step_number === $current_step ? 'aria-current="step"' : ''; ?>>
+					<?php echo esc_html( $label ); ?>
+				</li>
+			<?php endforeach; ?>
+		</ol>
+		<?php
 	}
 
 	/**
@@ -53,14 +116,23 @@ class UploadPage {
 	 */
 	public function import_html() {
 		?>
-		<div class="wrap">
-			<h1>Relay Core Data Upload</h1>
-			<form method="post" enctype="multipart/form-data">
-				<?php wp_nonce_field( 'relay_core_upload', 'relay_core_nonce' ); ?>
-				<input type="hidden" name="page_step_num" value="1">
-				<input type="file" name="import_file" accept=".csv,.json" required>
-				<input type="submit" name="submit_file" value="Upload File">
-			</form>
+		<div class="wrap rc-app">
+			<?php $this->page_header( 1, 'Bulk Import', 'Import listings from a CSV or JSON file.' ); ?>
+			<div class="rc-card rc-form-card">
+				<form method="post" enctype="multipart/form-data">
+					<?php wp_nonce_field( 'relay_core_upload', 'relay_core_nonce' ); ?>
+					<input type="hidden" name="page_step_num" value="1">
+					<label class="rc-dropzone" for="rc-import-file">
+						<span class="dashicons dashicons-upload rc-dropzone__icon" aria-hidden="true"></span>
+						<span class="rc-dropzone__title">Choose a CSV or JSON file</span>
+						<span class="rc-dropzone__hint">You will pick the title and ID columns in the next step.</span>
+						<input id="rc-import-file" class="rc-dropzone__input" type="file" name="import_file" accept=".csv,.json" required>
+					</label>
+					<div class="rc-actions">
+						<input type="submit" name="submit_file" value="Upload and continue" class="button button-primary button-hero">
+					</div>
+				</form>
+			</div>
 		</div>
 		<?php
 	}
@@ -75,33 +147,43 @@ class UploadPage {
 	 */
 	public function mapping_html( array $headers, string $import_id ) {
 		?>
-		<div class="wrap">
-			<h1>Map File Columns</h1>
+		<div class="wrap rc-app">
+			<?php $this->page_header( 2, 'Map columns', 'Tell Relay Core which columns hold the listing title and its unique ID.' ); ?>
+			<div class="rc-card rc-form-card">
+				<form method="post" enctype="multipart/form-data">
+					<?php wp_nonce_field( 'relay_core_mapping', 'relay_core_nonce' ); ?>
+					<input type="hidden" name="import_id" value="<?php echo esc_attr( $import_id ); ?>">
+					<input type="hidden" name="page_step_num" value="2">
 
-			<form method="post" enctype="multipart/form-data">
-				<?php wp_nonce_field( 'relay_core_mapping', 'relay_core_nonce' ); ?>
-				<input type="hidden" name="import_id" value="<?php echo esc_attr( $import_id ); ?>">
-				<input type="hidden" name="page_step_num" value="2">
-				<label for="select_post_title">Select Post title: </label>
-				<select name="select_post_title" required>
-					<option value="">--Select Post title--</option>
-					<?php foreach ( $headers as $header ) : ?>
-						<option value="<?php echo esc_attr( $header ); ?>"><?php echo esc_html( $header ); ?></option>
-					<?php endforeach; ?>
-				</select>
-				<br><br>
+					<div class="rc-field">
+						<label class="rc-field__label" for="select_post_title">Post title <span class="rc-required" aria-hidden="true">*</span></label>
+						<select id="select_post_title" name="select_post_title" required>
+							<option value="">Select a column</option>
+							<?php foreach ( $headers as $header ) : ?>
+								<option value="<?php echo esc_attr( $header ); ?>"><?php echo esc_html( $header ); ?></option>
+							<?php endforeach; ?>
+						</select>
+						<p class="rc-field__hint">Becomes the listing title. Rows with this column empty are skipped.</p>
+					</div>
 
-				<label for="select_external_id">Select External ID: </label>
-				<select name="select_external_id" required>
-					<option value="">--Select External ID--</option>
-					<?php foreach ( $headers as $header ) : ?>
-						<option value="<?php echo esc_attr( $header ); ?>"><?php echo esc_html( $header ); ?></option>
-					<?php endforeach; ?>
-				</select>
-				<br><br>
+					<div class="rc-field">
+						<label class="rc-field__label" for="select_external_id">External ID <span class="rc-required" aria-hidden="true">*</span></label>
+						<select id="select_external_id" name="select_external_id" required>
+							<option value="">Select a column</option>
+							<?php foreach ( $headers as $header ) : ?>
+								<option value="<?php echo esc_attr( $header ); ?>"><?php echo esc_html( $header ); ?></option>
+							<?php endforeach; ?>
+						</select>
+						<p class="rc-field__hint">A unique value per row. Importing the same ID again updates that listing.</p>
+					</div>
 
-				<input type="submit" name="submit_mapping" value="Submit Mapping">
-			</form>
+					<p class="rc-field__hint">All other columns are saved as listing meta.</p>
+
+					<div class="rc-actions">
+						<input type="submit" name="submit_mapping" value="Start import" class="button button-primary button-hero">
+					</div>
+				</form>
+			</div>
 		</div>
 		<?php
 	}
@@ -289,14 +371,23 @@ class UploadPage {
 			'importId' => $import_id,
 		);
 
-		wp_enqueue_script( 'relay-core-import', plugins_url( 'assets/js/import.js', RELAY_CORE_FILE ), array(), '0.1.0', true );
+		wp_enqueue_script( 'relay-core-import', plugins_url( 'assets/js/import.js', RELAY_CORE_FILE ), array(), '0.2.0', true );
 		wp_localize_script( 'relay-core-import', 'relayCoreImport', $ajax_response );
 
 		?>
 
-		<div class="wrap">
-			<h1>Importing…</h1>
-			<p id="relay-core-progress">Starting…</p>
+		<div class="wrap rc-app">
+			<?php $this->page_header( 3, 'Importing', 'You can leave this page. The import keeps running in the background.' ); ?>
+			<div class="rc-card rc-form-card rc-progress-card" id="relay-core-progress-card">
+				<div class="rc-progress" role="presentation">
+					<span class="rc-progress__bar" id="relay-core-progress-bar"></span>
+				</div>
+				<p id="relay-core-progress" aria-live="polite">Starting…</p>
+				<div class="rc-actions">
+					<a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=listing&page=relay-user-history' ) ); ?>">View import history</a>
+					<a class="button-link" href="<?php echo esc_url( admin_url( 'edit.php?post_type=listing&page=relay-import' ) ); ?>">Import another file</a>
+				</div>
+			</div>
 		</div>
 
 		<?php
