@@ -9,9 +9,9 @@
 
 Relay Core imports rows from a CSV or JSON file into a **Listings** custom post type. You choose which column is the post title and which is the external ID; every other column is saved as post meta. Re-importing the same file updates the existing listings instead of creating duplicates.
 
-Large files are imported in batches, so the import does not hit the server's request time limit. The screen shows progress while it runs and lists the rows that failed when it finishes.
+Imports run in the background with Action Scheduler, 500 rows per job, so they never hit the request time limit and keep going if you close the page. An **Import History** dashboard built in React lists every import and opens its failed rows in a popup.
 
-**Status:** version 0.1.0, an early release. See [Roadmap](#roadmap) for what works today and what is planned.
+**Status:** version 0.1.0 is released; the background imports, REST API and History dashboard are in `main` and not tagged yet. See [Roadmap](#roadmap).
 
 ---
 
@@ -43,10 +43,28 @@ Large files are imported in batches, so the import does not hit the server's req
 
 ### Large files
 
-- **Batch processing** — the import runs 500 rows per request, one request after another, until the file is done
-- **Saved progress** — each import's file, mapping, position and counters are stored on the server, so every request continues where the last one stopped
-- **Progress display** — the screen shows rows done out of the total and a percentage
-- **Error log** — every failed row is saved to a custom database table with its row number, field and reason; the first 100 are listed when the import finishes
+- **Background jobs** — each batch of 500 rows runs as an Action Scheduler job, and every job queues the next one until the file is done
+- **Saved progress** — each import's file, mapping, position and counters are stored on the server, so every job continues where the last one stopped
+- **Stuck import recovery** — a check every 5 minutes restarts a running import that has not moved for 4 minutes, and marks it failed after 3 retries
+- **Progress display** — a progress bar with rows done, the total and a percentage; you can leave the page while it runs
+- **Error log** — every failed row is saved to a custom database table with its row number, field and reason
+
+### Admin screens
+
+- **Three-step import** — upload, map columns, import, with a step indicator on every screen
+- **Import History** — a React dashboard listing every import with its status, date, total and failed count
+- **Failed rows popup** — opens from an import's row, 20 rows per page, closes with the close button, Escape or a click outside
+- **Follows the admin colour scheme** — the screens use the user's WordPress admin colour as their primary colour
+
+### REST API
+
+All routes need the `manage_options` capability. From the admin, `apiFetch` sends the REST nonce automatically.
+
+| Method | Route | Returns |
+|---|---|---|
+| GET | `/wp-json/relay-core/v1/imports` | Every import with its status, counters and created time |
+| GET | `/wp-json/relay-core/v1/imports/{id}` | One import |
+| GET | `/wp-json/relay-core/v1/imports/{id}/logs?page=1&per_page=20` | One page of that import's failed rows, with `total`, `page` and `per_page` |
 
 ### Security
 
@@ -80,12 +98,15 @@ git clone https://github.com/NajafAli786110/Relay-Core.git
 cd Relay-Core
 composer install
 npm install
+npm run build
 npx wp-env start
 ```
 
 WordPress is then available at `http://localhost:8888` (user `admin`, password `password`).
 
-The plugin creates its log table when it is activated. If you update the code and the table is missing, deactivate and activate the plugin once.
+`npm run build` compiles the History dashboard and the stylesheets into `build/`, which is not committed. Without it, the History page shows a notice asking you to run it.
+
+The plugin creates its log table when it is activated. It also stores a database version and updates the table on the next page load whenever that version changes, so updating the code does not need a reactivation.
 
 ---
 
@@ -94,14 +115,18 @@ The plugin creates its log table when it is activated. If you update the code an
 1. Go to **Listings → Bulk Import** in the WordPress admin.
 2. Upload a `.csv` or `.json` file.
 3. Choose which column is the **post title** and which is the **external ID**.
-4. Click **Submit Mapping**. The import starts and the screen shows its progress, for example `1500 / 50000 rows (3%)`.
+4. Click **Start import**. The import starts in the background and the screen shows its progress, for example `1500 / 50000 rows (3%)`.
 
-Keep the page open until the import finishes. You then see how many listings were created, updated and failed, followed by the failed rows:
+You can leave the page; the import keeps running. If you stay, you see how many listings were created, updated and failed when it finishes, followed by the failed rows:
 
 ```
 Row 14: Required field is empty. (post_title)
 Row 203: Required field is empty. (external_id)
 ```
+
+### Import History
+
+**Listings → History** lists every import, newest first. Click **View details** on an import with failures to open its failed rows in a popup, 20 per page.
 
 ### Column mapping
 
@@ -142,8 +167,12 @@ Each class has one job. Classes in `Import/` know nothing about `$_POST`, `$_FIL
 
 ```
 Admin\UploadPage      upload form, mapping form, starts the import
-Admin\ImportAjax      AJAX handler: runs one batch per request
+Admin\ImportAjax      AJAX handler: reports an import's status to the progress screen
+Admin\LogsPage        History page; loads the React dashboard on that screen only
+Rest\ImportsController  REST routes for imports and their failed rows
 
+Import\BackgroundImport   queues and runs one batch job with Action Scheduler
+Import\StuckImportChecker restarts imports whose job chain broke
 Import\FileValidator    checks the uploaded file (extension, size, MIME type)
 Import\ReaderFactory    returns the reader that matches the file extension
 Import\ReaderInterface  contract for all readers
@@ -156,17 +185,21 @@ Import\ImportState      saves and loads the progress of an import
 Import\ImportLog        saves and reads failed rows in a custom table
 Import\BatchProcessor   imports one batch, logs failures, updates the import state
 
-assets/js/import.js     calls the AJAX handler until the import is done
+assets/js/import.js     polls the import status every 3 seconds and updates the progress bar
+src/LogDashboard/       React History dashboard (ImportsTable, ImportRow, ImportLogs popup)
+src/Upload/             stylesheet entry for the import screens
+src/styles/             shared SCSS tokens and components
 ```
 
-`BatchProcessor` and `ImportAjax` receive their collaborators through their constructors, which keeps them testable without the WordPress admin or a real upload.
+`BatchProcessor`, `BackgroundImport` and the REST controller receive their collaborators through their constructors, which keeps them testable without the WordPress admin or a real upload.
 
 ### How one import runs
 
-1. The upload request validates the file, saves it and creates an import state.
-2. The mapping request stores the chosen columns in that state and prints the progress screen.
-3. The script on that screen sends one AJAX request per batch. Each request reads the state, imports the next 500 rows, logs the rows that failed and saves the new position.
-4. When a batch finds no more rows, the status becomes `done` and the response includes the failed rows.
+1. The upload request validates the file, saves it and creates an import state with status `pending`.
+2. The mapping request stores the chosen columns, sets the status to `running` and queues the first background job. Only the 64-character import ID is passed to the job.
+3. Each job reads the state, imports the next 500 rows, logs the rows that failed, saves the new position and queues the next job.
+4. When a job finds no more rows, the status becomes `done`.
+5. Meanwhile the progress screen asks for the status every 3 seconds, and the History dashboard reads the same data through the REST API.
 
 ### Project structure
 
@@ -178,11 +211,14 @@ relay-core/
 ├── assets/
 │   └── js/
 │       └── import.js
+├── build/                      (generated by npm run build, not committed)
 ├── src/
 │   ├── Admin/
 │   │   ├── ImportAjax.php
+│   │   ├── LogsPage.php
 │   │   └── UploadPage.php
 │   ├── Import/
+│   │   ├── BackgroundImport.php
 │   │   ├── BatchProcessor.php
 │   │   ├── ColumnMapper.php
 │   │   ├── CsvReader.php
@@ -193,17 +229,31 @@ relay-core/
 │   │   ├── ListingImporter.php
 │   │   ├── ListingValidator.php
 │   │   ├── ReaderFactory.php
-│   │   └── ReaderInterface.php
-│   ├── RegisterPostType.php
-│   └── RelayCorePlugin.php
+│   │   ├── ReaderInterface.php
+│   │   └── StuckImportChecker.php
+│   ├── LogDashboard/
+│   │   ├── app.js
+│   │   ├── app.scss
+│   │   ├── ImportLogs.js
+│   │   └── ImportRow.js
+│   ├── Rest/
+│   │   └── ImportsController.php
+│   ├── styles/
+│   │   ├── _components.scss
+│   │   └── _tokens.scss
+│   ├── Upload/
+│   │   ├── upload.js
+│   │   └── upload.scss
+│   └── RegisterPostType.php
 ├── tests/
-│   ├── fixtures/
-│   └── CsvReaderTest.php
+│   ├── integration/
+│   └── unit/
 ├── .wp-env.json
 ├── composer.json
 ├── package.json
 ├── phpcs.xml.dist
 ├── phpunit.xml.dist
+├── phpunit-integration.xml.dist
 └── relay-core.php
 ```
 
@@ -220,6 +270,17 @@ npx wp-env start      # start the site
 npx wp-env stop       # stop it, keep the data
 npx wp-env destroy    # remove the containers and the data
 ```
+
+### Dashboard and styles
+
+The History dashboard and both stylesheets are built with [`@wordpress/scripts`](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-scripts/). React comes from WordPress itself (`wp.element`), so it is not bundled.
+
+```bash
+npm run build   # production build into build/
+npm run start   # rebuild on every change while developing
+```
+
+Each entry also writes an `.asset.php` file with its script dependencies and a content-hash version, which the PHP side reads when it enqueues the files.
 
 Run WP-CLI inside the environment:
 
@@ -238,13 +299,13 @@ vendor/bin/phpcs -s   # report the rest, with sniff codes
 
 ### Tests
 
-Unit tests run with PHPUnit and do not need WordPress or a database.
+Unit tests run with PHPUnit and do not need WordPress or a database. They cover `CsvReader`, `JsonReader` and `ListingValidator`.
 
 ```bash
 vendor/bin/phpunit
 ```
 
-The suite currently covers `CsvReader`: a normal file, a header-only file and a row with the wrong number of columns. Tests for the other classes are planned.
+Integration tests for the REST routes run inside WordPress with `phpunit-integration.xml.dist`.
 
 ### Continuous integration
 
@@ -265,14 +326,20 @@ GitHub Actions runs PHPCS and PHPUnit on every push to `main` and on every pull 
 - [x] PHPUnit set up, with the first tests for `CsvReader`
 - [x] GitHub Actions CI (PHPCS and PHPUnit)
 
+**Done since 0.1.0 (in `main`)**
+
+- [x] Background processing with Action Scheduler
+- [x] Restart of stuck imports, failed after 3 retries
+- [x] Database version check that updates the log table without reactivation
+- [x] REST API endpoints for imports and their failed rows
+- [x] Import History dashboard in React, with a paginated failed rows popup
+- [x] Redesigned import screens with a step indicator and progress bar
+- [x] Tests for `JsonReader`, `ListingValidator` and the REST routes
+
 **Planned**
 
-- [ ] Tests for the validator, mapper, import state and batch processor
+- [ ] Tests for the mapper, import state and batch processor
 - [ ] Cleanup of abandoned imports, their uploaded files and old log rows
-- [ ] A page to browse the logs of past imports
-- [ ] Resume an import that was interrupted
-- [ ] Background processing with Action Scheduler
-- [ ] REST API endpoints
 - [ ] User-defined validation rules per column
 - [ ] Translation support
 
@@ -294,7 +361,11 @@ Uploads are limited to 20 MB. Because the import runs in batches, the number of 
 
 ### What happens if I close the page during an import?
 
-The import stops after the batch that is running. The rows already imported stay, and importing the same file again updates them instead of duplicating them. Resuming from where it stopped is planned.
+Nothing. The import runs in the background, not in the browser. You can check its result later under **Listings → History**.
+
+### What if an import gets stuck?
+
+If a job dies before queuing the next one, the stuck import check restarts it within a few minutes. After 3 restarts without progress the import is marked `failed`.
 
 ### Can it import into other post types?
 
