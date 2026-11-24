@@ -23,3 +23,5 @@ Thumbs.db
 # PHPUNIT
 .phpunit.result.cache
 scratch.php
+
+.wp-env.override.json
